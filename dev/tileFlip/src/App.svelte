@@ -4,7 +4,7 @@
 	import Contact from './Contact.svelte';
 
 	export const routes = [
-		{ path: '/', component: Contact },
+		{ path: '/', component: Game },
 		{ path: '/game', component: Game },
 	];
 </script>

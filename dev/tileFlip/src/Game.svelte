@@ -1,3 +1,75 @@
+<script lang="ts">
+	import { onMount } from 'svelte';
+	let tileGrid = [];
+	async function fetchData() {
+		try {
+			const response = await fetch('http://localhost:5000/getNewTileGrid');
+			const data = await response.json();
+			tileGrid = data.tileGrid;
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	}
+	
+	onMount(() => {
+		fetchData();
+	});
+
+	function toggleColor(row , col) {
+		const currentValue = tileGrid[row][col];
+		if (typeof currentValue === 'number') {
+			tileGrid[row][col] += 1;
+			if (tileGrid[row][col] > 2) {
+				tileGrid[row][col] = 0;
+			}
+		}
+	}
+</script>
+
+<style>
+	.tile {
+		width: 100px;
+		height: 100px;
+		align-items: center;
+		margin: 0;
+		padding: 0;
+	}
+
+	.grid {
+		border-collapse: collapse;
+	}
+
+	.gray {
+		background-color: #ccc;
+	}
+
+	.black {
+		background-color: #000;
+	}
+
+	.white {
+		background-color: #fff;
+	}
+
+	.text-center {
+		text-align: center;
+	}
+</style>
+
 <html lang="ts">
-	<h1>Game</h1>
+	<table class="grid">
+		{#each tileGrid as row, rowIndex}
+			<tr>
+				{#each row as value, colIndex}
+					<td class="text-center">
+						{#if typeof value === 'number'}
+							<button class="btn tile" class:gray={value === 0} class:white={value === 1} class:black={value === 2} on:click={() => toggleColor(rowIndex, colIndex)}></button>
+						{:else}
+							<span>{value}</span>
+						{/if}
+					</td>
+				{/each}
+			</tr>
+		{/each}
+	</table>
 </html>
