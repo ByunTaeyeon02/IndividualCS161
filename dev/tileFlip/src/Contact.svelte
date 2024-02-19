@@ -1,15 +1,19 @@
 <script lang="ts">
-	export let tileGrid = [[0, 0, 0, 0, 0], 
-						   [0, 0, 0, 0, 0], 
-						   [0, 0, 0, 0, 0], 
-						   [0, 0, 0, 0, 0], 
-						   [0, 0, 0, 0, 0]];
+	export let tileGrid = [[" ", "A", "B", "C", "D", "E"], 
+						   ["F", 0, 0, 0, 0, 0],
+						   ["G", 0, 0, 0, 0, 0], 
+						   ["H", 0, 0, 0, 0, 0], 
+						   ["I", 0, 0, 0, 0, 0], 
+						   ["J", 0, 0, 0, 0, 0]];
 	function toggleColor(row , col) {
-		tileGrid[row][col] += 1;
-		if (tileGrid[row][col] > 2) {
-			tileGrid[row][col] = 0;
+		const currentValue = tileGrid[row][col];
+		if (typeof currentValue === 'number') {
+			tileGrid[row][col] += 1;
+			if (tileGrid[row][col] > 2) {
+				tileGrid[row][col] = 0;
+			}
 		}
-	  }
+	}
 	console.log(tileGrid[0][0]);
 </script>
 
@@ -37,6 +41,10 @@
 	.white {
 		background-color: #fff;
 	}
+
+	.text-center {
+		text-align: center;
+	}
 </style>
 
 <html lang="ts">
@@ -44,10 +52,12 @@
 		{#each tileGrid as row, rowIndex}
 			<tr>
 				{#each row as value, colIndex}
-					<td>
-						<button class="btn tile" class:gray={value === 0} class:white={value === 1} class:black={value === 2} on:click={() => toggleColor(rowIndex, colIndex)}>
-							{value === 0 ? '' : (value === 1 ? 'W' : 'B')}
-						</button>
+					<td class="text-center">
+						{#if typeof value === 'number'}
+							<button class="btn tile" class:gray={value === 0} class:white={value === 1} class:black={value === 2} on:click={() => toggleColor(rowIndex, colIndex)}></button>
+						{:else}
+							<span>{value}</span>
+						{/if}
 					</td>
 				{/each}
 			</tr>
