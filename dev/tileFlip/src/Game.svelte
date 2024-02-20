@@ -73,7 +73,7 @@
 						{:else}
 							<td style="text-align: right">
 								{#if typeof value === 'number'}
-									<button class="btn tile" class:gray={value === 0} class:white={value === 1} class:black={value === 2} on:click={() => toggleColor(rowIndex, colIndex)}></button>
+									<button class="btn tile" class:gray={value === 0} class:black={value === 1} class:white={value === 2} on:click={() => toggleColor(rowIndex, colIndex)}></button>
 								{:else}
 									<span class="side">{value}</span>
 								{/if}
