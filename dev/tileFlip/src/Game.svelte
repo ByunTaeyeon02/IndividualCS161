@@ -28,8 +28,8 @@
 
 <style>
 	.tile {
-		width: 100px;
-		height: 100px;
+		width: 7.5vw;
+		height: 7.5vw;
 		align-items: center;
 		margin: 0;
 		padding: 0;
@@ -51,25 +51,37 @@
 		background-color: #fff;
 	}
 
-	.text-center {
-		text-align: center;
+	.top {
+		white-space: pre;
+	}
+
+	.side {
+		text-align: right;
 	}
 </style>
 
 <html lang="ts">
-	<table class="grid">
-		{#each tileGrid as row, rowIndex}
-			<tr>
-				{#each row as value, colIndex}
-					<td class="text-center">
-						{#if typeof value === 'number'}
-							<button class="btn tile" class:gray={value === 0} class:white={value === 1} class:black={value === 2} on:click={() => toggleColor(rowIndex, colIndex)}></button>
+	<div>
+		<table class="grid">
+			{#each tileGrid as row, rowIndex}
+				<tr>
+					{#each row as value, colIndex}
+						{#if rowIndex === 0}	
+							<td style="vertical-align: bottom; text-align: center">
+								<span class="top">{value}</span>
+							</td>
 						{:else}
-							<span>{value}</span>
+							<td style="text-align: right">
+								{#if typeof value === 'number'}
+									<button class="btn tile" class:gray={value === 0} class:white={value === 1} class:black={value === 2} on:click={() => toggleColor(rowIndex, colIndex)}></button>
+								{:else}
+									<span class="side">{value}</span>
+								{/if}
+							</td>
 						{/if}
-					</td>
-				{/each}
-			</tr>
-		{/each}
-	</table>
+					{/each}
+				</tr>
+			{/each}
+		</table>
+	</div>
 </html>
