@@ -3,7 +3,27 @@
 	let tileGrid = [];
 	async function fetchData() {
 		try {
-			const response = await fetch('http://localhost:5000/getNewTileGrid');
+			const response = await fetch('http://localhost:5000/generateNewPuzzle');
+			const data = await response.json();
+			tileGrid = data.tileGrid;
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	}
+
+	async function showSolution() {
+		try {
+			const response = await fetch('http://localhost:5000/showSolution');
+			const data = await response.json();
+			tileGrid = data.tileGridAnswer;
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	}
+
+	async function resetTileGrid() {
+		try {
+			const response = await fetch('http://localhost:5000/resetGrid');
 			const data = await response.json();
 			tileGrid = data.tileGrid;
 		} catch (error) {
@@ -83,5 +103,8 @@
 				</tr>
 			{/each}
 		</table>
+		<button class="btn btn-error" on:click={showSolution}>Show Solution</button>
+		<button class="btn btn-success">Check Answer</button>
+		<button class="btn btn-warning">Get Hint</button>
 	</div>
 </html>

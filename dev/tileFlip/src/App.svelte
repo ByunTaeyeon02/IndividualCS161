@@ -1,7 +1,7 @@
 <script>
 	import { Route, Router, navigate } from 'svelte-routing';
+	import './styles/main.css';
 	import Game from './Game.svelte';
-	import Contact from './Contact.svelte';
 
 	export const routes = [
 		{ path: '/', component: Game },
