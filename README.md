@@ -1,7 +1,7 @@
 + Project Title:
     + Tile Flip
 + GitHub URL:
-    + https://github.com/ByunTaeyeon02/IndividualCS161
+    + https://github.com/ByunTaeyeon02/TileFlip
 + Milestones with deadlines:
     + M1 (2/6 - 2/15): Setting up Github and Flask App
     + M2 (2/20 - 2/29): Add log-in, sign-up, and log-out
