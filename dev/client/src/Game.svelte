@@ -69,46 +69,37 @@
 		}
 	}
 	function setStringDisplay() {
-		for (let col = 0; col < 5; col++) {
-			let top = topStringArr[col].split(" ");
-			let cur = 0;
+		for (let index = 0; index < 5; index++) {
+			let top = topStringArr[index].split(" ");
+			let side = sideStringArr[index].split(" ");
+			let topCur = 0;
+			let sideCur = 0;
 			let topString = "";
+			let sideString = "";
 			for (let i of top) {
 				if (i == 1) {
-					cur++;
+					topCur++;
 				} else {
-					if (cur != 0) {
-						topString += cur + "\n";
-						cur = 0;
-					}
+					if (topCur != 0)
+						topString += topCur + "\n";
+					topCur = 0;
 				}
 			}
-			if (cur != 0) {
-				topString += cur + "\n";
-			}
-			topStringArr[col] = topString;
-			DisplayedGrid[0][col + 1] = topString;
-		}
-
-		for (let row = 0; row < 5; row++) {
-			let side = sideStringArr[row].split(" ");
-			let cur = 0;
-			let sideString = "";
 			for (let i of side) {
 				if (i == 1) {
-					cur++;
+					sideCur++;
 				} else {
-					if (cur != 0) {
-						sideString += cur + " ";
-						cur = 0;
-					}
+					if (sideCur != 0)
+						sideString += sideCur + " ";
+					sideCur = 0;
 				}
 			}
-			if (cur != 0) {
-				sideString += cur + " ";
-			}
-			sideStringArr[row] = sideString;
-			DisplayedGrid[row + 1][0] = sideString;
+			if (topCur != 0)
+				topString += topCur + "\n";
+			if (sideCur != 0)
+				sideString += sideCur + " ";
+			DisplayedGrid[0][index + 1] = topString;
+			DisplayedGrid[index + 1][0] = sideString;
 		}
 	}
 	
