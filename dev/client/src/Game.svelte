@@ -1,12 +1,21 @@
-<script lang="ts">
+<script lang="js">
 	import { onMount } from 'svelte';
-	let tileGrid = [];
 
+	let DisplayedGrid = [
+		[" ", "", "", "", ""],
+		["", 0, 0, 0, 0, 0],
+		["", 0, 0, 0, 0, 0],
+		["", 0, 0, 0, 0, 0],
+		["", 0, 0, 0, 0, 0],
+		["", 0, 0, 0, 0, 0]
+	]
+	let tileGrid = [];
 	async function generatePuzzle() {
 		try {
             const response = await fetch('http://127.0.0.1:8080/generateNewPuzzle');
 			const data = await response.json();
 			tileGrid = data.tileGrid;
+			translateTileToDisplay();
             console.log(tileGrid);
 		} catch (error) {
 			console.error('Error fetching data:', error);
@@ -18,6 +27,7 @@
 			const response = await fetch('http://127.0.0.1:8080/showSolution');
 			const data = await response.json();
 			tileGrid = data.tileGridAnswer;
+			translateTileToDisplay();
             console.log(tileGrid);
 		} catch (error) {
 			console.error('Error fetching data:', error);
@@ -29,21 +39,90 @@
 			const response = await fetch('http://127.0.0.1:8080/resetGrid');
 			const data = await response.json();
 			tileGrid = data.tileGrid;
+			translateTileToDisplay();
 		} catch (error) {
 			console.error('Error fetching data:', error);
+		}
+	}
+
+	function translateTileToDisplay() {
+		for (let row = 1; row < 6; row++) {
+			for (let col = 1; col < 6; col++) {
+				DisplayedGrid[row][col] = tileGrid[row - 1][col - 1]
+			}
+		}
+	}
+
+	let topStringArr = []
+	let sideStringArr = []
+	async function getStringDisplay() {
+		try {
+			const response = await fetch('http://127.0.0.1:8080/getStringRowArr');
+			const data = await response.json();
+			topStringArr = data.topColArr;
+			sideStringArr = data.sideRowArr;
+			console.log(topStringArr);
+			console.log(sideStringArr);
+			setStringDisplay();
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	}
+	function setStringDisplay() {
+		for (let col = 0; col < 5; col++) {
+			let top = topStringArr[col].split(" ");
+			let cur = 0;
+			let topString = "";
+			for (let i of top) {
+				if (i == 1) {
+					cur++;
+				} else {
+					if (cur != 0) {
+						topString += cur + "\n";
+						cur = 0;
+					}
+				}
+			}
+			if (cur != 0) {
+				topString += cur + "\n";
+			}
+			topStringArr[col] = topString;
+			DisplayedGrid[0][col + 1] = topString;
+		}
+
+		for (let row = 0; row < 5; row++) {
+			let side = sideStringArr[row].split(" ");
+			let cur = 0;
+			let sideString = "";
+			for (let i of side) {
+				if (i == 1) {
+					cur++;
+				} else {
+					if (cur != 0) {
+						sideString += cur + " ";
+						cur = 0;
+					}
+				}
+			}
+			if (cur != 0) {
+				sideString += cur + " ";
+			}
+			sideStringArr[row] = sideString;
+			DisplayedGrid[row + 1][0] = sideString;
 		}
 	}
 	
 	onMount(() => {
         generatePuzzle();
+		getStringDisplay();
 	});
 
 	function toggleColor(row , col) {
-		const currentValue = tileGrid[row][col];
+		const currentValue = DisplayedGrid[row][col];
 		if (typeof currentValue === 'number') {
-			tileGrid[row][col] += 1;
-			if (tileGrid[row][col] > 2) {
-				tileGrid[row][col] = 0;
+			DisplayedGrid[row][col] += 1;
+			if (DisplayedGrid[row][col] > 2) {
+				DisplayedGrid[row][col] = 0;
 			}
 		}
 	}
@@ -86,7 +165,7 @@
 <html lang="ts">
 	<div>
 		<table class="grid">
-			{#each tileGrid as row, rowIndex}
+			{#each DisplayedGrid as row, rowIndex}
 				<tr>
 					{#each row as value, colIndex}
 						{#if rowIndex === 0}	
