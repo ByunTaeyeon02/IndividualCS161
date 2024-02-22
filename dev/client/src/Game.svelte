@@ -1,5 +1,6 @@
 <script lang="js">
 	import { onMount } from 'svelte';
+	import NavBar from './Components/NavBar.svelte';
 
 	let tileGrid = [];
 	let DisplayedGrid = [
@@ -17,6 +18,7 @@
 			const data = await response.json();
 			tileGrid = data.tileGrid;
 			translateTileToDisplay();
+			getStringDisplay();
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
@@ -131,14 +133,6 @@
 </script>
 
 <style>
-	.tile {
-		width: 7.5vw;
-		height: 7.5vw;
-		align-items: center;
-		margin: 0;
-		padding: 0;
-	}
-
 	.grid {
 		border-collapse: collapse;
 	}
@@ -166,24 +160,18 @@
 	.giveUp {
 		width: 9vw;
 		height: 7.5vw;
-		align-items: center;
-		font-size: 1vw;
 		border-radius: 1.5vw 3vw;
 	}
 
 	.middleBut {
 		width: 7.5vw;
 		height: 5vw;
-		align-items: center;
-		font-size: 1vw;
 		border-radius: 2vw;
 	}
 
 	.check {
 		width: 9vw;
 		height: 7.5vw;
-		align-items: center;
-		font-size: 1vw;
 		border-radius: 3vw 1.5vw;
 	}
 
@@ -221,11 +209,53 @@
 		font-size: 2.5vw;
 		color: #000;
 	}
+
+	.tile {
+		width: 8vw;
+		height: 8vw;
+		align-items: center;
+		margin: 0;
+		padding: 0;
+	}
+
+    @media (min-width: 1400px) {
+        .tile {
+			width: 5vw;
+			height: 5vw;
+		}
+
+		.button {
+			font-size: 1vw;
+		}
+
+		.giveUp {
+			width: 5.5vw;
+			height: 5vw;
+			border-radius: 1vw 2vw;
+		}
+
+		.middleBut {
+			width: 5vw;
+			height: 3vw;
+			border-radius: 1vw;
+		}
+
+		.check {
+			width: 5.5vw;
+			height: 5vw;
+			border-radius: 2vw 1vw;
+		}
+
+		.displayTableString {
+			font-size: 1.5vw;
+		}
+    }
 </style>
 
 <html lang="ts">
+	<NavBar/>
 	<div class="gameScreen">
-		<table class="grid">
+		<table class="grid" style="max-height: 90vh; overflow-y: auto;">
 			{#each DisplayedGrid as row, rowIndex}
 				<tr>
 					{#each row as value, colIndex}
@@ -250,9 +280,9 @@
 				<td colspan="5" style="text-align: center;">
 					<div style="display: flex; justify-content: space-around; margin-top: 1vw;">
 						<button class="button buttonBlack giveUp" on:click={showSolution}>Give Up</button>
-						<button class="button buttonBlack middleBut" on:click={generatePuzzle}>Reset</button>
+						<button class="button buttonBlack middleBut" on:click={resetTileGrid}>Reset</button>
 						<button class="button buttonBlack middleBut">Hint</button>
-						<button class="button buttonBlack check">Done</button>
+						<button class="button buttonBlack check" on:click={generatePuzzle}>Done</button>
 					</div>
 				</td>
 			</tr>
