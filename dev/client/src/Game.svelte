@@ -1,6 +1,7 @@
 <script lang="js">
 	import { onMount } from 'svelte';
 
+	let tileGrid = [];
 	let DisplayedGrid = [
 		[" ", "", "", "", ""],
 		["", 0, 0, 0, 0, 0],
@@ -9,14 +10,13 @@
 		["", 0, 0, 0, 0, 0],
 		["", 0, 0, 0, 0, 0]
 	]
-	let tileGrid = [];
+	
 	async function generatePuzzle() {
 		try {
             const response = await fetch('http://127.0.0.1:8080/generateNewPuzzle');
 			const data = await response.json();
 			tileGrid = data.tileGrid;
 			translateTileToDisplay();
-            console.log(tileGrid);
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
@@ -28,7 +28,6 @@
 			const data = await response.json();
 			tileGrid = data.tileGridAnswer;
 			translateTileToDisplay();
-            console.log(tileGrid);
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
@@ -61,8 +60,6 @@
 			const data = await response.json();
 			topStringArr = data.topColArr;
 			sideStringArr = data.sideRowArr;
-			console.log(topStringArr);
-			console.log(sideStringArr);
 			setStringDisplay();
 		} catch (error) {
 			console.error('Error fetching data:', error);
@@ -102,10 +99,24 @@
 			DisplayedGrid[index + 1][0] = sideString;
 		}
 	}
+
+	async function getStringDisplay1() {
+		try {
+			const response = await fetch('http://127.0.0.1:8080/getStringRowArr1');
+			const data = await response.json();
+			topStringArr = data.topColArr;
+			sideStringArr = data.sideRowArr;
+			console.log("top: " + topStringArr);
+			console.log("side: " + sideStringArr);
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	}
 	
 	onMount(() => {
         generatePuzzle();
 		getStringDisplay();
+		getStringDisplay1();
 	});
 
 	function toggleColor(row , col) {
@@ -133,7 +144,7 @@
 	}
 
 	.gray {
-		background-color: #ccc;
+		background-color: #b5b5b5;
 	}
 
 	.black {
@@ -151,33 +162,100 @@
 	.side {
 		text-align: right;
 	}
+
+	.giveUp {
+		width: 9vw;
+		height: 7.5vw;
+		align-items: center;
+		font-size: 1vw;
+		border-radius: 1.5vw 3vw;
+	}
+
+	.middleBut {
+		width: 7.5vw;
+		height: 5vw;
+		align-items: center;
+		font-size: 1vw;
+		border-radius: 2vw;
+	}
+
+	.check {
+		width: 9vw;
+		height: 7.5vw;
+		align-items: center;
+		font-size: 1vw;
+		border-radius: 3vw 1.5vw;
+	}
+
+	.gameScreen {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		height: 90vh;
+	}
+
+	.button {
+		border: none;
+		align-items: center;
+		text-align: center;
+		text-decoration: none;
+		display: inline-block;
+		font-size: 2vw;
+		transition-duration: 0.4s;
+		cursor: pointer;
+	}
+
+	.buttonBlack {
+		background-color: #000;
+		color: white;
+	}
+
+	.buttonBlack:hover {
+		background-color: white;
+		color: #000;
+		border: 2px solid #000;
+	}
+
+	.displayTableString {
+		font-size: 2.5vw;
+		color: #000;
+	}
 </style>
 
 <html lang="ts">
-	<div>
+	<div class="gameScreen">
 		<table class="grid">
 			{#each DisplayedGrid as row, rowIndex}
 				<tr>
 					{#each row as value, colIndex}
 						{#if rowIndex === 0}	
 							<td style="vertical-align: bottom; text-align: center">
-								<span class="top">{value}</span>
+								<span class="top displayTableString">{value}</span>
 							</td>
 						{:else}
 							<td style="text-align: right">
 								{#if typeof value === 'number'}
 									<button class="btn tile" class:gray={value === 0} class:black={value === 1} class:white={value === 2} on:click={() => toggleColor(rowIndex, colIndex)}></button>
 								{:else}
-									<span class="side">{value}</span>
+									<span class="side displayTableString">{value}</span>
 								{/if}
 							</td>
 						{/if}
 					{/each}
 				</tr>
 			{/each}
+			<tr>
+				<td></td>
+				<td colspan="5" style="text-align: center;">
+					<div style="display: flex; justify-content: space-around; margin-top: 1vw;">
+						<button class="button buttonBlack giveUp" on:click={showSolution}>Give Up</button>
+						<button class="button buttonBlack middleBut" on:click={generatePuzzle}>Reset</button>
+						<button class="button buttonBlack middleBut">Hint</button>
+						<button class="button buttonBlack check">Done</button>
+					</div>
+				</td>
+			</tr>
 		</table>
-		<button class="btn btn-error" on:click={showSolution}>Show Solution</button>
-		<button class="btn btn-success" on:click={generatePuzzle}>Check Answer</button>
-		<button class="btn btn-warning">Get Hint</button>
 	</div>
 </html>
