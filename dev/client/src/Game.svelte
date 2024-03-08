@@ -130,6 +130,24 @@
 			}
 		}
 	}
+
+	async function checkAnswer() {
+		try {
+			const response = await fetch('http://127.0.0.1:8080/showSolution');
+			const data = await response.json();
+			tileGrid = data.tileGridAnswer;
+			let numWrong = 0;
+			for (let row = 0; row < 5; row++) {
+				for (let col = 0; col < 5; col++) {
+					if (tileGrid[row][col] != DisplayedGrid[row + 1][col + 1])
+						numWrong++;
+				}
+			}
+			console.log(numWrong);
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	}
 </script>
 
 <style>
@@ -282,7 +300,7 @@
 						<button class="button buttonBlack giveUp" on:click={showSolution}>Give Up</button>
 						<button class="button buttonBlack middleBut" on:click={resetTileGrid}>Reset</button>
 						<button class="button buttonBlack middleBut">Hint</button>
-						<button class="button buttonBlack check" on:click={generatePuzzle}>Done</button>
+						<button class="button buttonBlack check" on:click={checkAnswer}>Done</button>
 					</div>
 				</td>
 			</tr>
