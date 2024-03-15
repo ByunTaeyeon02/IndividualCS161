@@ -1,6 +1,8 @@
 <script lang="js">
     import { navigate } from 'svelte-routing';
     import { onMount, onDestroy } from 'svelte';
+    import TailwindCss from './TailwindCSS.svelte';
+ 
 
     let userType = 1;			// 0 = admin, 1 = regular, 2 = guest
 
@@ -26,7 +28,7 @@
 </script>
 
 <style>
-	nav {
+	.nav {
 		display:flex;
 	}
 
@@ -48,9 +50,12 @@
 	}
 </style>
 
+<TailwindCss />
+
 <html lang="en">
-	<nav>
+	<body class="nav">
 		<h1>Tile Flip</h1>
+        <h1 class="text-3xl font-bold underline">Tile</h1>
 		<ul>
             <li>
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -58,11 +63,9 @@
                 <a on:click={navToGame}>Game</a>
             </li>
             {#if userType > 1} 
-                <li>
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <!-- svelte-ignore a11y-missing-attribute -->
-                    <a on:click={logInPressed}>Log-in</a>
-                </li>
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <!-- svelte-ignore a11y-missing-attribute -->
+                <a on:click={logInPressed}>Log-in</a>
             {:else}
                 <li>
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -81,5 +84,5 @@
                 </li>
             {/if}
         </ul>
-	</nav>
+	</body>
 </html>

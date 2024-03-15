@@ -1,6 +1,6 @@
 <script lang="js">
 	import { onMount } from 'svelte';
-	import NavBar from './Components/NavBar.svelte';
+	import NavBar from './lib/NavBar.svelte';
 
 	let tileGrid = [];
 	let DisplayedGrid = [

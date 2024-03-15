@@ -3,6 +3,7 @@
 	import Game from './Game.svelte';
 	import Score from './Score.svelte';
 	import Settings from './Settings.svelte';
+	import TailwindCss from './lib/TailwindCSS.svelte';
 
 	export const routes = [
 		{ path: "/", component: Game },
@@ -10,6 +11,8 @@
 		{ path: "/Settings", component: Settings },
 	];
 </script>
+
+<TailwindCss />
 
 <html lang="en">
 	<body>
