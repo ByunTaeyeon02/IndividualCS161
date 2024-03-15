@@ -19,6 +19,8 @@
 	- cd into /client and run
 		- Install node.js
 		- npm install (install npm on machine)
+  		- npm install -D tailwindcss@latest postcss@latest
+    		- npm install -D autoprefixer
 		- npm run build (to check and make sure there’s no error with the svelte code)
 		- npm run dev (to see the website)
 			- Once this is run it will give you a local host link
