@@ -11,6 +11,8 @@
 		["", 0, 0, 0, 0, 0],
 		["", 0, 0, 0, 0, 0]
 	]
+
+	let hintOn = false;
 	
 	async function generatePuzzle() {
 		try {
@@ -30,6 +32,23 @@
 			const data = await response.json();
 			tileGrid = data.tileGridAnswer;
 			translateTileToDisplay();
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	}
+
+	// @ts-ignore
+	async function getHint(row, col) {
+		try {
+			const response = await fetch('http://127.0.0.1:8080/getHint', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ row: row, col: col })
+			});
+			const data = await response.json();
+			DisplayedGrid[row][col] = data.value;
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
@@ -129,14 +148,21 @@
 	// @ts-ignore
 	function toggleColor(row, col) {
 		const currentValue = DisplayedGrid[row][col];
-		if (typeof currentValue === 'number') {
-			if (DisplayedGrid[row][col] == 0) {
-				DisplayedGrid[row][col] = 1;
-			} else if (DisplayedGrid[row][col] == 1) {
-				DisplayedGrid[row][col] = 2;
-			} else {
-				DisplayedGrid[row][col] = 0;
+		if (hintOn) {
+			if (typeof currentValue === 'number') { 
+				getHint(row, col);
+				hintOn = false;
 			}
+		} else {
+			if (typeof currentValue === 'number') {
+				if (DisplayedGrid[row][col] == 0) {
+					DisplayedGrid[row][col] = 1;
+				} else if (DisplayedGrid[row][col] == 1) {
+					DisplayedGrid[row][col] = 2;
+				} else {
+					DisplayedGrid[row][col] = 0;
+			}
+		}
 		}
 	}
 
@@ -163,41 +189,50 @@
 	<title>Game</title>
 	<meta name="description" content="Game page" />
 </svelte:head>
+
 <html lang="ts">
 	<section>
 		<div class="gameScreen">
-			<table class="grid" style="max-height: 90vh; overflow-y: auto;">
-				{#each DisplayedGrid as row, rowIndex}
-					<tr>
-						{#each row as value, colIndex}
-							{#if rowIndex === 0}	
-								<td style="vertical-align: bottom; text-align: center">
-									<span class="top displayTableString">{value}</span>
-								</td>
-							{:else}
-								<td style="text-align: right">
-									{#if typeof value === 'number'}
-										<button class="btn tile" class:gray={value === 0} class:black={value === 1} class:white={value === 2} on:click={() => toggleColor(rowIndex, colIndex)}></button>
+			<div class="card w-300 shadow-xl pr-10 pb-6 pt-4 rounded-3xl">
+				<div class="card-body">
+					<table style="max-height: 90vh; overflow-y: auto; border-collapse: collapse;">
+						{#each DisplayedGrid as row, rowIndex}
+							<tr>
+								{#each row as value, colIndex}
+									{#if rowIndex === 0}	
+										<td style="vertical-align: bottom; text-align: center">
+											<span class="top displayTableString">{value}</span>
+										</td>
 									{:else}
-										<span class="side displayTableString">{value}</span>
+										<td style="text-align: right">
+											{#if typeof value === 'number'}
+												<button class="btn tile shadow-xl" class:gray={value === 0} class:black={value === 1} class:white={value === 2} on:click={() => toggleColor(rowIndex, colIndex)}></button>
+											{:else}
+												<span class="side displayTableString">{value}</span>
+											{/if}
+										</td>
 									{/if}
-								</td>
-							{/if}
+								{/each}
+							</tr>
 						{/each}
-					</tr>
-				{/each}
-				<tr>
-					<td></td>
-					<td colspan="5" style="text-align: center;">
-						<div style="display: flex; justify-content: space-around; margin-top: 1vw;">
-							<button class="button buttonBlack giveUp" on:click={showSolution}>Give Up</button>
-							<button class="button buttonBlack middleBut" on:click={resetTileGrid}>Reset</button>
-							<button class="button buttonBlack middleBut">Hint</button>
-							<button class="button buttonBlack check" on:click={checkAnswer}>Done</button>
-						</div>
-					</td>
-				</tr>
-			</table>
+						<tr>
+							<td></td>
+							<td colspan="5" style="text-align: center;">
+								<div style="display: flex; justify-content: space-around; margin-top: 1vw;">
+									<button class="btn btn-outline btn-error giveUp shadow-xl" on:click={showSolution}>Give Up</button>
+									<div class="tooltip" data-tip="Reset color of all squares">
+										<button class="btn btn-outline middleBut shadow-xl" on:click={resetTileGrid}>Reset</button>
+									</div>
+									<div class="tooltip" data-tip="Click on a square to see correct color">
+										<input class="btn btn-outline middleBut shadow-xl" type="checkbox" bind:checked={hintOn} aria-label="Hint"/>
+									</div>
+									<button class="btn btn-outline btn-success check shadow-xl" on:click={checkAnswer}>Check</button>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
 		</div>
 	</section>
 </html>
@@ -215,20 +250,16 @@
 		flex: 0.6;
 	}
 
-	.grid {
-		border-collapse: collapse;
-	}
-
 	.gray {
-		background-color: #b5b5b5;
+		background-color: gray;
 	}
 
 	.black {
-		background-color: #000;
+		background-color: black;
 	}
 
 	.white {
-		background-color: #fff;
+		background-color: white;
 	}
 
 	.top {
@@ -265,31 +296,8 @@
 		height: 90vh;
 	}
 
-	.button {
-		border: none;
-		align-items: center;
-		text-align: center;
-		text-decoration: none;
-		display: inline-block;
-		font-size: 2vw;
-		transition-duration: 0.4s;
-		cursor: pointer;
-	}
-
-	.buttonBlack {
-		background-color: #000;
-		color: white;
-	}
-
-	.buttonBlack:hover {
-		background-color: white;
-		color: #000;
-		border: 2px solid #000;
-	}
-
 	.displayTableString {
 		font-size: 2.5vw;
-		color: #000;
 	}
 
 	.tile {
@@ -306,26 +314,25 @@
 			height: 5vw;
 		}
 
-		.button {
-			font-size: 1vw;
-		}
-
 		.giveUp {
 			width: 5.5vw;
 			height: 5vw;
 			border-radius: 1vw 2vw;
+			font-size: 1vw;
 		}
 
 		.middleBut {
 			width: 5vw;
 			height: 3vw;
 			border-radius: 1vw;
+			font-size: 1vw;
 		}
 
 		.check {
 			width: 5.5vw;
 			height: 5vw;
 			border-radius: 2vw 1vw;
+			font-size: 1vw;
 		}
 
 		.displayTableString {

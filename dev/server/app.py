@@ -1,9 +1,17 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request, render_template, redirect, session
 from flask_cors import CORS
 import random
+import json
 
 app = Flask(__name__)
 CORS(app)
+
+app.secret_key = 'my_secret_key'
+users = {
+    'u1': '123',
+    'u2': '123123'
+}
+
 
 tileGrid = [
     [0, 0, 0, 0, 0],
@@ -117,6 +125,11 @@ def getRowString(curCol):
     return row_string.strip()
 
 
+def getHintSquare(row,col):
+    return tileGridAnswer[row][col]
+
+
+
 @app.route('/generateNewPuzzle')
 def generateNewPuzzle():
     generatePuzzle()
@@ -139,6 +152,14 @@ def getStringRowArr():
 def getStringRowArr1():
     displayString = getStringDisplay()
     return jsonify({'topColArr': displayString[0], 'sideRowArr': displayString[1]})
+
+@app.route('/getHint', methods=['POST'])
+def getHint():
+    data = request.get_json()
+    row = data.get('row')
+    col = data.get('col')
+    value = tileGridAnswer[row - 1][col - 1]
+    return jsonify({'value': value})
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

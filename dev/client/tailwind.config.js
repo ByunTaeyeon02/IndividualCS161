@@ -1,13 +1,18 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  purge: [
-           "./**/*.svelte",  // Look for .svelte files
-           "./**/*.html" // Look for .html files
-        ],
+import daisyui from 'daisyui';
+
+export default {
+  mode: 'jit',
+  purge: ['./index.html', './src/**/*.{svelte,js,ts}'],
+  darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {},
   },
-  variants: {},
-  plugins: [],
+  variants: {
+    extend: {},
+  },
+  plugins: [daisyui],
+  daisyui: {
+    themes: ["light", "dark", "lemonade"],
+  },
 }
 
