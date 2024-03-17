@@ -11,8 +11,13 @@
 		["", 0, 0, 0, 0, 0],
 		["", 0, 0, 0, 0, 0]
 	]
-	// @ts-ignore
-	let userAnswerGrid = [];
+	let userAnswerGrid = [
+		[0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0]
+	]
 
 	let hintOn = false;
 	// @ts-ignore
@@ -47,14 +52,13 @@
 			const response = await fetch('http://127.0.0.1:8080/showSolution');
 			const data = await response.json();
 			tileGrid = data.tileGridAnswer;
-			userAnswerGrid = tileGrid;
 			for (let row = 1; row < 6; row++) {
 				for (let col = 1; col < 6; col++) {
 					// @ts-ignore
 					userAnswerGrid[row - 1][col - 1] = DisplayedGrid[row][col];
 				}
 			}
-			//translateTileToDisplay(tileGrid);
+			translateTileToDisplay(tileGrid);
 			gaveUp = true;
 		} catch (error) {
 			console.error('Error fetching data:', error);
@@ -239,10 +243,10 @@
 		}
 		if (showSolutionAnswer) {
 			// @ts-ignore
-			translateTileToDisplay(userAnswerGrid);
+			translateTileToDisplay(tileGrid);
 		} else {
 			// @ts-ignore
-			translateTileToDisplay(tileGrid);
+			translateTileToDisplay(userAnswerGrid);
 		}
 	}
 
@@ -328,7 +332,7 @@
 									<div class="form-control">
 										<label class="label cursor-pointer">
 										  <span class="label-text">Correct Solution</span> 
-										  <input type="checkbox" class="toggle toggle-lg" />
+										  <input type="checkbox" class="toggle toggle-lg" bind:checked={showSolutionAnswer} on:click={toggleAnswers}/>
 										  <span class="label-text">Your Answer</span> 
 										</label>
 									</div>
