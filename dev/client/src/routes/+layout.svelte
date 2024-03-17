@@ -10,8 +10,10 @@
 		<slot />
 	</main>
 
-	<footer>
-		<p> This is footer (WIP) </p>
+	<footer class="footer p-4">
+		<nav class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
+			<p>Copyright © 2024 - All right reserved</p>
+		</nav>
 	</footer>
 </div>
 

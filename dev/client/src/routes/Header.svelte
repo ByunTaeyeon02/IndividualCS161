@@ -1,6 +1,6 @@
 <script>
 	import { page } from '$app/stores';
-	import logo from '$lib/images/svelte-logo.svg';
+	import logo from '$lib/images/TF.png';
 	import github from '$lib/images/github.svg';
 	
 	let userType = 2;			// 0 = admin, 1 = regular, 2 = guest
@@ -60,12 +60,30 @@
 	a,input,button,p {
 		font-family: 'BadComic';
 	}
+
+	.logo-container {
+		display:flex;
+    }
+
+    .text {
+        transition: opacity 0.3s ease-in-out; 
+        opacity: 0;
+    }
+
+    .logo-container:hover .text {
+        opacity: 1;
+    }
 </style>
 
 <header>
 	<div class="navbar bg-base-100 shadow-2xl">
-		<div class="flex-1 "> 
-			<h3 class="font-bold text-4xl pl-3">Tile Flip</h3>
+		<div class="flex-1 pl-3"> 
+			<div class="logo-container">
+				<div class="w-10 rounded">
+					<img src={logo} alt="Tile Flip Logo">
+				</div>
+				<h3 class="font-bold text-2xl pl-3 text">Tile Flip</h3>
+			</div>
 		</div>
 		<div class="flex-none">
 			<label class="swap swap-rotate">
