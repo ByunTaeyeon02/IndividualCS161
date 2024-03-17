@@ -15,10 +15,6 @@
 </script>
 
 <style>
-	.nav {
-		display:flex;
-	}
-
 	ul {
 		display: flex;
 		margin: 0;
@@ -40,7 +36,7 @@
 <header>
 	<div class="navbar bg-base-100 shadow-2xl">
 		<div class="flex-1">
-			<h1>Tile Flip</h1>
+			<h1 class="font-bold">Tile Flip</h1>
 		</div>
 		<div class="flex-none">
 			<label class="swap swap-rotate">
