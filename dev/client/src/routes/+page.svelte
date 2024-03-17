@@ -11,9 +11,12 @@
 		["", 0, 0, 0, 0, 0],
 		["", 0, 0, 0, 0, 0]
 	]
+	// @ts-ignore
+	let userAnswerGrid = [];
 
 	let hintOn = false;
-
+	// @ts-ignore
+	let showSolutionAnswer = false;
 	let gaveUp = false;
 
 	let showWrongAnswerMsg = false;
@@ -30,7 +33,7 @@
             const response = await fetch('http://127.0.0.1:8080/generateNewPuzzle');
 			const data = await response.json();
 			tileGrid = data.tileGrid;
-			translateTileToDisplay();
+			translateTileToDisplay(tileGrid);
 			getStringDisplay();
 			showRightAnswerMsg = false;
 			gaveUp = false;
@@ -44,7 +47,14 @@
 			const response = await fetch('http://127.0.0.1:8080/showSolution');
 			const data = await response.json();
 			tileGrid = data.tileGridAnswer;
-			translateTileToDisplay();
+			userAnswerGrid = tileGrid;
+			for (let row = 1; row < 6; row++) {
+				for (let col = 1; col < 6; col++) {
+					// @ts-ignore
+					userAnswerGrid[row - 1][col - 1] = DisplayedGrid[row][col];
+				}
+			}
+			//translateTileToDisplay(tileGrid);
 			gaveUp = true;
 		} catch (error) {
 			console.error('Error fetching data:', error);
@@ -73,18 +83,19 @@
 			const response = await fetch('http://127.0.0.1:8080/resetGrid');
 			const data = await response.json();
 			tileGrid = data.tileGrid;
-			translateTileToDisplay();
+			translateTileToDisplay(tileGrid);
 			showResetMsg = false;
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
 	}
 
-	function translateTileToDisplay() {
+	// @ts-ignore
+	function translateTileToDisplay(grid) {
 		for (let row = 1; row < 6; row++) {
 			for (let col = 1; col < 6; col++) {
 				// @ts-ignore
-				DisplayedGrid[row][col] = tileGrid[row - 1][col - 1]
+				DisplayedGrid[row][col] = grid[row - 1][col - 1]
 			}
 		}
 	}
@@ -222,6 +233,19 @@
 		}
 	}
 
+	function toggleAnswers() {
+		if (!gaveUp) {
+			showSolution();
+		}
+		if (showSolutionAnswer) {
+			// @ts-ignore
+			translateTileToDisplay(userAnswerGrid);
+		} else {
+			// @ts-ignore
+			translateTileToDisplay(tileGrid);
+		}
+	}
+
 	$: {
 		if (showWrongAnswerMsg) {
 			setTimeout(() => {
@@ -297,13 +321,30 @@
 								{/each}
 							</tr>
 						{/each}
-						<tr>
-							<td></td>
-							{#if gaveUp}
+						{#if gaveUp}
+							<tr>
+								<td></td>
 								<td colspan="5" style="text-align: center;">
-									<button class="btn btn-outline shadow-xl" style=" margin-top: 2vw;" on:click={generatePuzzle}>Generate New Puzzle</button>
+									<div class="form-control">
+										<label class="label cursor-pointer">
+										  <span class="label-text">Correct Solution</span> 
+										  <input type="checkbox" class="toggle toggle-lg" />
+										  <span class="label-text">Your Answer</span> 
+										</label>
+									</div>
 								</td>
-							{:else}
+							</tr>
+							<tr>
+								<td></td>
+								<td colspan="5" style="text-align: center;">
+									<div>
+										<button class="btn btn-outline shadow-xl" style="width: 100%" on:click={generatePuzzle}>Generate New Puzzle</button>
+									</div>
+								</td>
+							</tr>
+						{:else}
+							<tr>
+								<td></td>
 								<td colspan="5" style="text-align: center;">
 									<div style="display: flex; justify-content: space-around; margin-top: 1vw;">
 										<button class="btn btn-outline btn-error giveUp shadow-xl" on:click={showSolution}>Give Up</button>
@@ -314,8 +355,9 @@
 										<button class="btn btn-outline btn-success check shadow-xl" on:click={checkUserAnswer}>Check</button>
 									</div>
 								</td>
-							{/if}
-						</tr>
+							</tr>
+						{/if}
+						
 					</table>
 				</div>
 			</div>
