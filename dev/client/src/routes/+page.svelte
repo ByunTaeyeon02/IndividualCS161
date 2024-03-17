@@ -261,7 +261,7 @@
 				<span>{rightAnswerMsg}</span>
 				<div>
 					<button class="btn btn-sm btn-ghost" on:click={denyAlert}>Deny</button>
-					<button class="btn btn-sm btn-outline" on:click={generatePuzzle}>Accept</button>
+					<button class="btn btn-sm btn-outline shadow-xl" on:click={generatePuzzle}>Accept</button>
 				</div>
 			</div>
 		{:else if showWrongAnswerMsg}
@@ -275,7 +275,7 @@
 				<span>{restMsg}</span>
 				<div>
 					<button class="btn btn-sm btn-ghost" on:click={denyAlert}>Deny</button>
-					<button class="btn btn-sm btn-outline" on:click={resetTileGrid}>Accept</button>
+					<button class="btn btn-sm btn-outline " on:click={resetTileGrid}>Accept</button>
 				</div>
 			</div>
 		{:else if showWarningMsg}
@@ -302,7 +302,7 @@
 											{#if typeof value === 'number'}
 												<button class="btn tile shadow-xl" class:gray={value === 0} class:black={value === 1} class:white={value === 2} on:click={() => toggleColor(rowIndex, colIndex)}></button>
 											{:else}
-												<span class="side displayTableString">{value}</span>
+												<span class="side displayTableString pr-5">{value}</span>
 											{/if}
 										</td>
 									{/if}
@@ -335,17 +335,16 @@
 								<td></td>
 								<td colspan="5" style="text-align: center;">
 									<div style="display: flex; justify-content: space-around; margin-top: 1vw;">
-										<button class="btn btn-outline btn-error giveUp shadow-xl" on:click={showSolution}>Give Up</button>
+										<button class="btn btn-outline giveUp shadow-xl" on:click={showSolution}>Give Up</button>
 										<button class="btn btn-outline middleBut shadow-xl" on:click={confirmReset}>Reset</button>
 										<div class="tooltip" data-tip="Click on a tile to see correct color">
 											<input class="btn btn-outline middleBut shadow-xl" type="checkbox" bind:checked={hintOn} aria-label="Hint"/>
 										</div>
-										<button class="btn btn-outline btn-success check shadow-xl" on:click={checkUserAnswer}>Check</button>
+										<button class="btn btn-outline check shadow-xl" on:click={checkUserAnswer}>Check</button>
 									</div>
 								</td>
 							</tr>
 						{/if}
-						
 					</table>
 				</div>
 			</div>
@@ -357,6 +356,10 @@
 	@import 'tailwindcss/base';
 	@import 'tailwindcss/components';
 	@import 'tailwindcss/utilities';
+
+	button,span,input {
+		font-family: 'BadComic';
+	}
 
 	section {
 		display: flex;
