@@ -1,8 +1,7 @@
-<script lang="js">
+<script lang="ts">
 	import { onMount } from 'svelte';
 
-	// @ts-ignore
-	let tileGrid = [];
+	let tileGrid: any[] = [];
 	let DisplayedGrid = [
 		[" ", "", "", "", ""],
 		["", 0, 0, 0, 0, 0],
@@ -20,7 +19,6 @@
 	]
 
 	let hintOn = false;
-	// @ts-ignore
 	let showSolutionAnswer = false;
 	let gaveUp = false;
 
@@ -65,8 +63,7 @@
 		}
 	}
 
-	// @ts-ignore
-	async function getHint(row, col) {
+	async function getHint(row: number, col: number) {
 		try {
 			const response = await fetch('http://127.0.0.1:8080/getHint', {
 				method: 'POST',
@@ -94,65 +91,56 @@
 		}
 	}
 
-	// @ts-ignore
-	function translateTileToDisplay(grid) {
+	function translateTileToDisplay(grid: number[][]) {
 		for (let row = 1; row < 6; row++) {
 			for (let col = 1; col < 6; col++) {
-				// @ts-ignore
 				DisplayedGrid[row][col] = grid[row - 1][col - 1]
 			}
 		}
 	}
 
-	// @ts-ignore
-	let topStringArr = []
-	// @ts-ignore
-	let sideStringArr = []
+	let topStringArr: any[] = []
+	let sideStringArr: any[] = []
 	async function getStringDisplay() {
 		try {
 			const response = await fetch('http://127.0.0.1:8080/getStringRowArr');
 			const data = await response.json();
 			topStringArr = data.topColArr;
 			sideStringArr = data.sideRowArr;
-			setStringDisplay();
+			for (let index = 0; index < 5; index++) {
+				let top: any[] = topStringArr[index].split(" ");
+				let side: any[] = sideStringArr[index].split(" ");
+				let topCur = 0;
+				let sideCur = 0;
+				let topString = "";
+				let sideString = "";
+				for (let i of top) {
+					if (i == 1) {
+						topCur++;
+					} else {
+						if (topCur != 0)
+							topString += topCur + "\n";
+						topCur = 0;
+					}
+				}
+				for (let i of side) {
+					if (i == 1) {
+						sideCur++;
+					} else {
+						if (sideCur != 0)
+							sideString += sideCur + " ";
+						sideCur = 0;
+					}
+				}
+				if (topCur != 0)
+					topString += topCur + "\n";
+				if (sideCur != 0)
+					sideString += sideCur + " ";
+				DisplayedGrid[0][index + 1] = topString;
+				DisplayedGrid[index + 1][0] = sideString;
+			}
 		} catch (error) {
 			console.error('Error fetching data:', error);
-		}
-	}
-	function setStringDisplay() {
-		for (let index = 0; index < 5; index++) {
-			// @ts-ignore
-			let top = topStringArr[index].split(" ");
-			// @ts-ignore
-			let side = sideStringArr[index].split(" ");
-			let topCur = 0;
-			let sideCur = 0;
-			let topString = "";
-			let sideString = "";
-			for (let i of top) {
-				if (i == 1) {
-					topCur++;
-				} else {
-					if (topCur != 0)
-						topString += topCur + "\n";
-					topCur = 0;
-				}
-			}
-			for (let i of side) {
-				if (i == 1) {
-					sideCur++;
-				} else {
-					if (sideCur != 0)
-						sideString += sideCur + " ";
-					sideCur = 0;
-				}
-			}
-			if (topCur != 0)
-				topString += topCur + "\n";
-			if (sideCur != 0)
-				sideString += sideCur + " ";
-			DisplayedGrid[0][index + 1] = topString;
-			DisplayedGrid[index + 1][0] = sideString;
 		}
 	}
 	
@@ -161,8 +149,7 @@
 		getStringDisplay();
 	});
 
-	// @ts-ignore
-	function toggleColor(row, col) {
+	function toggleColor(row: number, col: number) {
 		if (!gaveUp) {
 			const currentValue = DisplayedGrid[row][col];
 			if (hintOn) {
@@ -203,7 +190,7 @@
 			} else {
 				showRightAnswerMsg = false;
 				showWrongAnswerMsg = true;
-				wrongAnswerMsg = "Number of Incorrect Tiles: " + numWrong;
+				wrongAnswerMsg = "Number of Incorrect Tile(s): " + numWrong;
 			}
 		} catch (error) {
 			console.error('Error fetching data:', error);
@@ -224,7 +211,6 @@
 		let uncomplete = false;
 		for (let row = 0; row < 5; row++) {
 			for (let col = 0; col < 5; col++) {
-				// @ts-ignore
 				if (DisplayedGrid[row + 1][col + 1] == 0)
 					uncomplete = true;
 			}
@@ -242,10 +228,8 @@
 			showSolution();
 		}
 		if (showSolutionAnswer) {
-			// @ts-ignore
 			translateTileToDisplay(tileGrid);
 		} else {
-			// @ts-ignore
 			translateTileToDisplay(userAnswerGrid);
 		}
 	}
