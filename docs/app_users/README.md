@@ -2,17 +2,33 @@
 
 - ### __Playing Game__ ###
 	- From the home page you can play the game by clicking on the tiles
- 	- Tiles can be gray, black, and white
-  		- Gray: unknown (player has not decided which color the tile is supposed to be)
-    - Buttons:
-  		- Give up: show the answer if the user gives up on the current puzzle
-      	- Reset: reset all the tiles to gray
-      	- Hint: show the correct answer to a selected square
-      		- Press of button first and then click on square to see the correct answer
-      	- Done (Not Fully Implemented Yet): check if the user's answer is right
-      		- For now it prints the number of wrong squares
-- ### __Navigating Using Navbar__ ###
-	- Game: navigate to the game page
- 	- Score: show stats of player (Only for players who signed in) (WIP)
-  	- Setting: edit the user's settings like password and username or delete the account (Only for players who signed in) (WIP)
-  	- Sign-in/Log-out: Gives options for users to sign in to save score (WIP)
+	- Tiles can be gray, black, and white
+		- Gray: unknown (player has not decided which color the tile is supposed to be)
+	- Buttons:
+		- Give up: show the answer if the user gives up on the current puzzle
+  			- Toggle: Toggle to see the difference between your answer and the solution
+     			- Player will not be able to change the tiles since they have already given up
+        		- Player will be given an option to start a new game
+		- Reset: reset all the tiles to gray
+  			- Will prompt an alert message confirming the reset
+		- Hint: show the correct answer to a selected tile
+			- Press the button first and then click on a tile to see the correct answer
+		- Done: check if the user's answer is right
+  			- If there are still gray tiles: prompt a message that the puzzle is not completed
+     			- If the answer is wrong: prompt number of wrong tile(s)
+        		- If the answer is correct: ask the user if they want to start a new game
+- ### __Navigating Using Navbar (Left to Right)__ ###
+	- TF Logo: Logo of Tile
+ 		- If you hover over the logo the name of the game will show :)
+ 	- Darkmode Toggle: default of light
+  		- Works even if you move to another page using the navbar
+    		- Preference doesn't save when refreshing the page (WIP)
+   	- Hamburger Menu
+   		- If you are logged in (Not connected to the backend)
+   	 		- Game: navigate to the game page
+   	   		- Score: show stats of player (Only for players who signed in) (WIP)
+			- Setting: edit the user's settings like password and username or delete the account (Only for players who signed in) (WIP)
+			- Log-out: log out of account (WIP)
+		- Else (Not connected to the backend)
+			- Game: navigate to the game page
+  			- Log-in/Sign-up: Gives options for users to log-in or sign-up to save score (WIP)
