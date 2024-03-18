@@ -249,7 +249,7 @@
 </script>
 
 <svelte:head>
-	<title>Tile Flip Game</title>
+	<title>Tile Flip</title>
 	<meta name="description" content="Game page" />
 </svelte:head>
 
@@ -461,7 +461,7 @@
 
 	.alert {
         position: fixed;
-        top: 10px;
+        top: 2vh;
         left: 50%;
         transform: translateX(-50%);
         width: 500px;
