@@ -5,7 +5,14 @@ export default {
   purge: ['./index.html', './src/**/*.{svelte,js,ts}'],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        Unbutton: ['Unbutton'],
+        Comikan: ['Comikan'],
+        Buba: ['Buba'],
+        BadComic: ['BadComic'],
+      }
+    },
   },
   variants: {
     extend: {},
