@@ -25,3 +25,5 @@
 		- npm run dev (to see the website)
 			- Once this is run it will give you a local host link
 			- Paste and enter that link into the internet browser
+   		- If you are having trouble with ts error try
+     			- npm install --save-dev typescript @vitejs/plugin-svelte
