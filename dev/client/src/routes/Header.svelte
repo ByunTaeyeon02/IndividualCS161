@@ -1,7 +1,6 @@
 <script>
 	import { page } from '$app/stores';
 	import logo from '$lib/images/TF.png';
-	import github from '$lib/images/github.svg';
 	
 	let userType = 2;			// 0 = admin, 1 = regular, 2 = guest
 	let loginPage = true;
@@ -53,10 +52,6 @@
         font-size: 1.5vh;
 	}
 
-	h3 {
-		font-family: 'Buba';
-	}
-
 	a,input,button,p {
 		font-family: 'BadComic';
 	}
@@ -82,7 +77,7 @@
 				<div class="w-10 rounded">
 					<img src={logo} alt="Tile Flip Logo">
 				</div>
-				<h3 class="font-bold text-2xl pl-3 text">Tile Flip</h3>
+				<p class="text-4xl pl-3 text">Tile Flip</p>
 			</div>
 		</div>
 		<div class="flex-none">
