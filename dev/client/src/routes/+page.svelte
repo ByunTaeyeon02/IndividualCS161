@@ -33,7 +33,7 @@
 	
 	async function generatePuzzle() {
 		try {
-            const response = await fetch('http://127.0.0.1:8080/generateNewPuzzle');
+            const response = await fetch('/generateNewPuzzle');
 			const data = await response.json();
 			tileGrid = data.tileGrid;
 			translateTileToDisplay(tileGrid);
@@ -47,7 +47,7 @@
 	
 	async function showSolution() {
 		try {
-			const response = await fetch('http://127.0.0.1:8080/showSolution');
+			const response = await fetch('/showSolution');
 			const data = await response.json();
 			tileGrid = data.tileGridAnswer;
 			for (let row = 1; row < 6; row++) {
@@ -65,7 +65,7 @@
 
 	async function getHint(row: number, col: number) {
 		try {
-			const response = await fetch('http://127.0.0.1:8080/getHint', {
+			const response = await fetch('/getHint', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -81,7 +81,7 @@
 
 	async function resetTileGrid() {
 		try {
-			const response = await fetch('http://127.0.0.1:8080/resetGrid');
+			const response = await fetch('/resetGrid');
 			const data = await response.json();
 			tileGrid = data.tileGrid;
 			translateTileToDisplay(tileGrid);
@@ -103,7 +103,7 @@
 	let sideStringArr: any[] = []
 	async function getStringDisplay() {
 		try {
-			const response = await fetch('http://127.0.0.1:8080/getStringRowArr');
+			const response = await fetch('/getStringRowArr');
 			const data = await response.json();
 			topStringArr = data.topColArr;
 			sideStringArr = data.sideRowArr;
@@ -173,7 +173,7 @@
 
 	async function checkAnswer() {
 		try {
-			const response = await fetch('http://127.0.0.1:8080/showSolution');
+			const response = await fetch('/showSolution');
 			const data = await response.json();
 			tileGrid = data.tileGridAnswer;
 			let numWrong = 0;
