@@ -28,6 +28,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
+    darkModeOn = db.Column(db.Boolean, nullable=False)
 
 @app.route('/current_user_id')
 @login_required
@@ -43,8 +44,9 @@ def register():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
+    darkModeOn = data.get('darkModeOn')
     hashed_password = generate_password_hash(password)
-    user = User(username=username, password=hashed_password)
+    user = User(username=username, password=hashed_password, darkModeOn=darkModeOn)
     db.session.add(user)
     db.session.commit()
     return jsonify({'message': 'User registered successfully'})
@@ -74,6 +76,37 @@ def protected():
         return jsonify({'loggedIn': True})
     else:
         return jsonify({'loggedIn': False})
+
+
+
+
+# testing grabing without http
+@app.route("/")
+def base():
+    return send_from_directory('../client/build', 'index.html')
+
+# Path for all the static files (compiled JS/CSS, etc.)
+@app.route("/<path:path>")
+def home(path):
+    return send_from_directory('../client/build', path)
+
+@app.route("/getDarkMode")
+def getDarkMode():
+    if current_user.is_authenticated:
+        return jsonify({'darkModeOn': current_user.darkModeOn})
+    else:
+        return jsonify({'message': 'User not authenticated'}), 401
+
+@app.route("/setDarkMode", methods=['POST'])
+def setDarkMode():
+    if current_user.is_authenticated:
+        data = request.get_json()
+        darkModeOn = data.get('darkModeOn')
+        current_user.darkModeOn = darkModeOn
+        db.session.commit()
+        return jsonify({'darkModeOn': current_user.darkModeOn})
+    else:
+        return jsonify({'message': 'User not authenticated'}), 401
 
 
 '''
