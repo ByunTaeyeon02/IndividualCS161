@@ -1,6 +1,7 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
 	import logo from '$lib/images/TF.png';
+	import { onMount } from 'svelte';
 	
 	let userType = 2;			// 0 = admin, 1 = regular, 2 = guest
 	let loginPage = true;
@@ -9,24 +10,129 @@
 	let userName = "";
 	let password = "";
 	let password2 = "";
+	let successMsg = "";
+
+	async function getCurrentUserId() {
+		try {
+			const response = await fetch('http://127.0.0.1:8080/current_user_id');
+			const data = await response.json();
+			const userId = data.user_id;
+			console.log('Current User ID:', userId);
+		} catch (error) {
+			console.error('Error fetching current user ID:', error);
+		}
+	}
+
+	async function signup(username: string, password: string) {
+		try {
+			const response = await fetch('http://127.0.0.1:8080/register', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ username: username, password: password })
+			});
+			const data = await response.json();
+			if (data.message === 'User registered successfully') {
+				success = true;
+				welcomMsg = "Welcome " + userName;
+				successMsg = "Sign Up Successfull";
+				
+				userName = "";
+				password = "";
+				password2 = "";
+
+				userType = 1;
+				//isUserLoggedIn();
+			}
+			console.log(data);
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	}
+
+	async function login(username: string, password: string) {
+		try {
+			const response = await fetch('http://127.0.0.1:8080/login', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ username: username, password: password })
+			});
+			const data = await response.json();
+			if (data.message === 'Login successful') {
+				success = true;
+				welcomMsg = "Welcome back " + userName;
+				successMsg = "Log In Successfull";
+				
+				userName = "";
+				password = "";
+				password2 = "";
+
+				userType = 1;
+				//isUserLoggedIn();
+			}
+			console.log(data);
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	}
+
+	async function isUserLoggedIn() {
+		try {
+			const response = await fetch('http://127.0.0.1:8080/protected');
+			//const response = await fetch('/protected', {
+			//	credentials: 'same-origin' // Include cookies
+			//});
+			const data = await response.json();
+			console.log(data.loggedIn);
+			if (data.loggedIn) {
+				userType = 1;
+			} else {
+				userType = 2;
+			}
+			//getCurrentUserId();
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	}
+
+	async function logout() {
+		try {
+			const response = await fetch('http://127.0.0.1:8080/logout');
+			const data = await response.json();
+			console.log(data.message);
+			success = false;
+			loginPage = true;
+			userName = "";
+			password = "";
+			password2 = "";
+
+			userType = 2;
+			//isUserLoggedIn();
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	}
 
     function logOutPressed() {
-		userType = 2;
-		success = false;
-		loginPage = true;
-		userName = "";
-		password = "";
-		password2 = "";
+		logout();
 	}
 
     function logInPressed() {
 		let bool1 = userName === "" && password === "";
+		if (!bool1) {
+			login(userName, password);
+		}
+	}
+
+	function signUpPressed() {
+		let bool1 = userName === "" && password === "";
 		let bool2 = password === password2;
 		if (!bool1) {
 			if (loginPage || (!loginPage && bool2)) {
-				success = true;
-				welcomMsg = "Welcome back " + "username";
-				userType = 1;
+				signup(userName, password);
 			}
 		}
 	}
@@ -37,6 +143,10 @@
 		else 
 			loginPage = true;
 	}
+
+	onMount(() => {
+        isUserLoggedIn();
+	});
 </script>
 
 <style>
@@ -104,12 +214,12 @@
 							<a on:click={logInPressed} onclick="my_modal_1.showModal()">Log-in</a>
 						</li>
 					{:else}
-					<li aria-current={$page.url.pathname === '/about' ? 'page' : undefined}>
-						<a href="/score">Score</a>
-					</li>
-					<li aria-current={$page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}>
-						<a href="/settings">Settings</a>
-					</li>
+						<li aria-current={$page.url.pathname === '/about' ? 'page' : undefined}>
+							<a href="/score">Score</a>
+						</li>
+						<li aria-current={$page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}>
+							<a href="/settings">Settings</a>
+						</li>
 						<li>
 							<!-- svelte-ignore a11y-click-events-have-key-events -->
 							<!-- svelte-ignore a11y-missing-attribute -->
@@ -168,7 +278,7 @@
 					</label>
 					<div class="modal-action">
 						<button class="btn btn-link" on:click={toggleLoginPage}>Returning user? Log-in here!</button>
-						<button class="btn" on:click={logInPressed}>Sign up</button>
+						<button class="btn" on:click={signUpPressed}>Sign up</button>
 					</div>
 				{/if}
 			{/if}
