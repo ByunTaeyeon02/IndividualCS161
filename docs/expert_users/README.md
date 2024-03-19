@@ -14,19 +14,24 @@
 	- Download VS Code and open the project inside the previously selected folder
 	- cd into dev
 	- Instal things like Flask and Python if you don’t have it on your machine
+	- cd into /client and run
+		- Install node.js
+			- npm install (install npm on machine)
+  			- npm install -D tailwindcss@latest postcss@latest
+    			- npm install -D autoprefixer
+      			- npm i -D @sveltejs/adapter-static
+		- npm run build (to check and make sure there’s no error with the svelte code)
+		- npm run dev (to see the website not connected to the backend)
+			- Once this is run it will give you a local host link
+			- Paste and enter that link into the internet browser
+   			- THIS IS NOT CONNECTED TO THE BACKEND
 	- cd into /server and run the server by typing 
 		- python app.py
+  			- This will give you a link to the website (Connected to the backend)
+     			- Run this if you want to see the most updated version of the project
   		- Other dependencies (Install if needed):
 		    - pip install cachelib
 		    - pip install flask-session
 		    - pip install flask-cors
 		    - pip install flask flask-login flask-sqlalchemy
-	- cd into /client and run
-		- Install node.js
-		- npm install (install npm on machine)
-  		- npm install -D tailwindcss@latest postcss@latest
-    		- npm install -D autoprefixer
-		- npm run build (to check and make sure there’s no error with the svelte code)
-		- npm run dev (to see the website)
-			- Once this is run it will give you a local host link
-			- Paste and enter that link into the internet browser
+	
