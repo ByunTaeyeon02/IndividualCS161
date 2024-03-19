@@ -16,6 +16,11 @@
 	- Instal things like Flask and Python if you don’t have it on your machine
 	- cd into /server and run the server by typing 
 		- python app.py
+  		- Other dependencies (Install if needed):
+		    - pip install cachelib
+		    - pip install flask-session
+		    - pip install flask-cors
+		    - pip install flask flask-login flask-sqlalchemy
 	- cd into /client and run
 		- Install node.js
 		- npm install (install npm on machine)
