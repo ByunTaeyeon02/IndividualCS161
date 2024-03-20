@@ -1,25 +1,40 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import logo from '$lib/images/TF.png';
 	import { onMount } from 'svelte';
+	import logo from '$lib/images/TF.png';
 	
-	let userType = 2;			// 0 = admin, 1 = regular, 2 = guest
-	let loginPage = true;
-	let success = false;
-	let welcomMsg = "";
-	let userName = "";
-	let password = "";
-	let password2 = "";
-	let successMsg = "";
+	let userType: number;			// 0 = admin, 1 = regular, 2 = guest
+	let loginPage: boolean;
+	let welcomMsg: string;
+	let userName: string;
+	let password: string;
+	let password2: string;
+	let successMsg: string;
+	let darkModeOn: boolean;
 
-	async function getCurrentUserId() {
+	let storedUsername: string;
+    let storedPassword: string;
+	let storedPassword2: string;
+
+	let successAlert = false;
+	let warningAlert = false;
+	let warningMsg = "";
+
+	let openModal = true;
+
+	async function isUserLoggedIn() {
 		try {
-			const response = await fetch('/current_user_id');
+			const response = await fetch('/protected');
 			const data = await response.json();
-			const userId = data.user_id;
-			console.log('Current User ID:', userId);
+			console.log(data.loggedIn);
+			if (data.loggedIn) {
+				userType = 1;
+				getIsDarkMode();
+			} else {
+				userType = 2;
+			}
 		} catch (error) {
-			console.error('Error fetching current user ID:', error);
+			console.error('Error fetching data:', error);
 		}
 	}
 
@@ -30,20 +45,17 @@
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({ username: username, password: password, darkModeOn: darkModeOn })
+				body: JSON.stringify({ username: storedUsername, password: storedPassword, darkModeOn: darkModeOn })
 			});
 			const data = await response.json();
 			if (data.message === 'User registered successfully') {
-				success = true;
-				welcomMsg = "Welcome " + userName;
+				welcomMsg = "Welcome " + storedUsername;
 				successMsg = "Sign Up Successfull";
-				
-				userName = "";
-				password = "";
-				password2 = "";
-
-				//userType = 1;
+				successAlert = true;
+				openModal = false;
 				isUserLoggedIn();
+			} else {
+				openModal = true;
 			}
 			console.log(data);
 		} catch (error) {
@@ -55,23 +67,21 @@
 		try {
 			const response = await fetch('/login', {
 				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ username: username, password: password })
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ username: storedUsername, password: storedPassword })
 			});
 			const data = await response.json();
 			if (data.message === 'Login successful') {
-				success = true;
-				welcomMsg = "Welcome back " + userName;
+				welcomMsg = "Welcome back " + storedUsername;
 				successMsg = "Log In Successfull";
-				
-				userName = "";
-				password = "";
-				password2 = "";
-
-				//userType = 1;
+				successAlert = true;
 				isUserLoggedIn();
+				openModal = false;
+			} else {
+				openModal = true;
+				successAlert = false;
+				warningAlert = true;
+				warningMsg = data.message;
 			}
 			console.log(data);
 		} catch (error) {
@@ -79,21 +89,13 @@
 		}
 	}
 
-	async function isUserLoggedIn() {
+	async function logout() {
 		try {
-			const response = await fetch('/protected');
+			const response = await fetch('/logout');
 			const data = await response.json();
-			console.log(data.loggedIn);
-			if (data.loggedIn) {
-				userType = 1;
-				userName = "";
-				password = "";
-				password2 = "";
-				getIsDarkMode();
-			} else {
-				userType = 2;
-			}
-			//getCurrentUserId();
+			console.log(data.message);
+			loginPage = true;
+			isUserLoggedIn();
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
@@ -110,65 +112,7 @@
 		}
 	}
 
-	async function logout() {
-		try {
-			const response = await fetch('/logout');
-			const data = await response.json();
-			console.log(data.message);
-			success = false;
-			loginPage = true;
-			userName = "";
-			password = "";
-			password2 = "";
-
-			//userType = 2;
-			isUserLoggedIn();
-		} catch (error) {
-			console.error('Error fetching data:', error);
-		}
-	}
-
-    function logOutPressed() {
-		saveIsDarkMode();
-		logout();
-	}
-
-    function logInPressed() {
-		let bool1 = userName === "" && password === "";
-		if (!bool1) {
-			login(userName, password);
-		}
-	}
-
-	function signUpPressed() {
-		let bool1 = userName === "" && password === "";
-		let bool2 = password === password2;
-		if (!bool1) {
-			if (loginPage || (!loginPage && bool2)) {
-				signup(userName, password);
-			}
-		}
-	}
-
-	function toggleLoginPage() {
-		if (loginPage)
-			loginPage = false
-		else 
-			loginPage = true;
-	}
-
-	onMount(() => {
-        isUserLoggedIn();
-	});
-
-	let darkModeOn: Boolean;
-
-	function toggleDarkMode() {
-		if (userType <= 1)
-			saveIsDarkMode();
-	}
-
-	async function saveIsDarkMode() {
+    async function saveIsDarkMode() {
 		try {
 			const response = await fetch('/setDarkMode', {
 				method: 'POST',
@@ -183,6 +127,83 @@
 			console.error('Error fetching data:', error);
 		}
 	}
+
+	onMount(() => {
+        isUserLoggedIn();
+		loginPage = true;
+		reset();
+	});
+
+	function signUpPressed() {
+		let bool1 = userName === "" && password === "";
+		let bool2 = password === password2;
+		if (!bool1) {
+			if (loginPage || (!loginPage && bool2)) {
+				storedUsername = userName;
+       			storedPassword = password;
+				signup(userName, password);
+			} else {
+				warningAlert = true;
+				warningMsg = "Passwords aren't the same";
+			}
+		} else {
+			warningAlert = true;
+			warningMsg = "Username and password cannot be blank";
+		}
+	}
+
+    function logInPressed() {
+		let bool1 = userName === "" && password === "";
+		if (!bool1) {
+			storedUsername = userName;
+        	storedPassword = password;
+			login(userName, password);
+		} else {
+			warningAlert = true;
+			warningMsg = "Username and password cannot be blank";
+		}
+	}
+
+	function toggleLoginPage() {
+		if (loginPage)
+			loginPage = false
+		else 
+			loginPage = true;
+	}
+
+	function logOutPressed() {
+		reset();
+		logout();
+	}
+
+	function toggleDarkMode() {
+		if (userType <= 1)
+			saveIsDarkMode();
+	}
+
+	function reset() {
+		userName = "";
+		password = "";
+		password2 = "";
+	}
+
+	$: {
+		if (successAlert) {
+			setTimeout(() => {
+				successAlert = false;
+			}, 2500);
+		}
+		if (warningAlert) {
+			setTimeout(() => {
+				warningAlert = false;
+			}, 2500);
+		}
+
+		if (!openModal) {
+			const modal = document.getElementById('my_modal_1');
+			modal.close();
+		}
+  	} 
 </script>
 
 <style>
@@ -198,7 +219,7 @@
         font-size: 1.5vh;
 	}
 
-	a,input,button,p {
+	a,input,button,p,span {
 		font-family: 'BadComic';
 	}
 
@@ -213,6 +234,15 @@
 
     .logo-container:hover .text {
         opacity: 1;
+    }
+
+	.alert {
+        position: fixed;
+        top: 2vh;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 500px;
+        z-index: 1000;
     }
 </style>
 
@@ -247,7 +277,7 @@
 							<!-- svelte-ignore a11y-click-events-have-key-events -->
 							<!-- svelte-ignore a11y-missing-attribute -->
 							<!-- svelte-ignore a11y-no-static-element-interactions -->
-							<a on:click={logInPressed} onclick="my_modal_1.showModal()">Log-in</a>
+							<a onclick="my_modal_1.showModal()">Log-in</a>
 						</li>
 					{:else}
 						<li aria-current={$page.url.pathname === '/about' ? 'page' : undefined}>
@@ -270,15 +300,23 @@
 	  </div>
 </header>
 <body>
+	{#if successAlert}	
+		<div role="alert" class="alert">
+			<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+			<span>{successMsg}</span>
+		</div>
+	{:else if warningAlert}
+		<div role="alert" class="alert">
+			<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+			<span>{warningMsg}</span>
+		</div>
+	{/if}
 	<dialog id="my_modal_1" class="modal">
 		<div class="modal-box">
-		  	<form method="dialog">
-				<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+			<form method="dialog">
+				<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" on:click={reset}>✕</button>
 			</form>
-			{#if success} 
-				<p class="font-bold text-xl">Log In Successfull</p>
-				<p class="py-4">{welcomMsg}</p>
-			{:else}
+			<div>
 				{#if loginPage} 
 					<p class="font-bold text-xl">Log In</p>
 					<div class="p-3"></div>
@@ -317,8 +355,7 @@
 						<button class="btn" on:click={signUpPressed}>Sign up</button>
 					</div>
 				{/if}
-			{/if}
-			
+			</div>
 		</div>
 	</dialog>
 </body>
