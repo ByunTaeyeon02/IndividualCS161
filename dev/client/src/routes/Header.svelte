@@ -86,6 +86,9 @@
 			console.log(data.loggedIn);
 			if (data.loggedIn) {
 				userType = 1;
+				userName = "";
+				password = "";
+				password2 = "";
 				getIsDarkMode();
 			} else {
 				userType = 2;
@@ -101,6 +104,7 @@
 			const response = await fetch('/getDarkMode');
 			const data = await response.json();
 			darkModeOn = data.darkModeOn;
+			console.log("darkModeOn: " + darkModeOn);
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
@@ -125,6 +129,7 @@
 	}
 
     function logOutPressed() {
+		saveIsDarkMode();
 		logout();
 	}
 
@@ -156,13 +161,14 @@
         isUserLoggedIn();
 	});
 
-	let darkModeOn = false;
+	let darkModeOn: Boolean;
 
 	function toggleDarkMode() {
-		saveIsDarkMode(darkModeOn);
+		if (userType <= 1)
+			saveIsDarkMode();
 	}
 
-	async function saveIsDarkMode(darkModeOn: boolean) {
+	async function saveIsDarkMode() {
 		try {
 			const response = await fetch('/setDarkMode', {
 				method: 'POST',

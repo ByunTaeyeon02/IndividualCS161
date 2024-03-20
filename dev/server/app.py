@@ -78,14 +78,10 @@ def protected():
         return jsonify({'loggedIn': False})
 
 
-
-
-# testing grabing without http
 @app.route("/")
 def base():
     return send_from_directory('../client/build', 'index.html')
 
-# Path for all the static files (compiled JS/CSS, etc.)
 @app.route("/<path:path>")
 def home(path):
     return send_from_directory('../client/build', path)
@@ -107,40 +103,6 @@ def setDarkMode():
         return jsonify({'darkModeOn': current_user.darkModeOn})
     else:
         return jsonify({'message': 'User not authenticated'}), 401
-
-
-'''
-@app.route('/register', methods=['POST'])
-def register():
-    data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
-    hashed_password = generate_password_hash(password)
-    user = User(username=username, password=hashed_password)
-    db.session.add(user)
-    db.session.commit()
-    return jsonify({'message': 'User registered successfully'})
-
-@app.route('/login', methods=['POST'])
-def login():
-    data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
-    user = User.query.filter_by(username=username).first()
-    if user and check_password_hash(user.password, password):
-        session['logged_in'] = True
-        session['username'] = user.username
-        return jsonify({'message': 'Login successful'})
-    return jsonify({'message': 'Invalid username or password'})
-
-@app.route('/logout')
-def logout():
-    session.pop('logged_in', None)
-    session.pop('username', None)
-    return jsonify({'message': 'Logged out successfully'})
-
-'''
-
 
 
 tileGrid = [
