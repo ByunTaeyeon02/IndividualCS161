@@ -1,4 +1,6 @@
 <script lang="ts">
+	// TODO: add hint checkers|alerts|save numOfHintsUsed, implement nomOfHints+10hints per win, implement save numOfGiveUps
+
 	import { onMount } from 'svelte';
 
 	let tileGrid: any[] = [];
@@ -186,7 +188,7 @@
 			if (numWrong == 0) {
 				showRightAnswerMsg = true;
 				showWrongAnswerMsg = false;
-				rightAnswerMsg = "Congrats! New Puzzle?";
+				rightAnswerMsg = "Congrats (+10 Hints)! New Puzzle?";
 			} else {
 				showRightAnswerMsg = false;
 				showWrongAnswerMsg = true;

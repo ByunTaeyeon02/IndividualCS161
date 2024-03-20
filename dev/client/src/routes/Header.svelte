@@ -95,6 +95,7 @@
 			const data = await response.json();
 			console.log(data.message);
 			loginPage = true;
+			window.location.href = '/';
 			isUserLoggedIn();
 		} catch (error) {
 			console.error('Error fetching data:', error);
@@ -132,6 +133,7 @@
         isUserLoggedIn();
 		loginPage = true;
 		reset();
+		darkModeOn = false;
 	});
 
 	function signUpPressed() {
@@ -284,7 +286,7 @@
 							<a href="/score">Score</a>
 						</li>
 						<li aria-current={$page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}>
-							<a href="/settings">Settings</a>
+							<a href="/account">Account</a>
 						</li>
 						<li>
 							<!-- svelte-ignore a11y-click-events-have-key-events -->
