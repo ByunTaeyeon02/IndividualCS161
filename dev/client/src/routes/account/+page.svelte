@@ -16,6 +16,21 @@
 	let newPassword2: string;
 	let newUsername: string;
 
+	async function isUserLoggedIn() {
+		try {
+			const response = await fetch('/protected');
+			const data = await response.json();
+			console.log(data.loggedIn);
+			if (data.loggedIn) {
+				getUserInfoFull();
+			} else {
+				window.location.href = '/';
+			}
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	}
+
 	async function getUserInfoFull() { 
 		try {
 			const response = await fetch('/getUserInfo');
@@ -26,14 +41,13 @@
 			numOfHints = data.numOfHints;
 			numOfHintsUsed = data.numOfHintsUsed;
 			numOfGiveUpsUsed = data.numOfGiveUpsUsed;
-			console.log("puzzleCompleted: " + puzzleCompleted);
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
 	}
 
 	onMount(() => {
-        getUserInfoFull();
+        isUserLoggedIn();
 		newPassword1 = "";
 		newPassword2 = "";
 		newUsername = "";

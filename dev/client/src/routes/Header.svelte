@@ -54,6 +54,7 @@
 				successAlert = true;
 				openModal = false;
 				isUserLoggedIn();
+				window.location.href = '/';
 			} else {
 				openModal = true;
 			}
@@ -77,6 +78,7 @@
 				successAlert = true;
 				isUserLoggedIn();
 				openModal = false;
+				window.location.href = '/';
 			} else {
 				openModal = true;
 				successAlert = false;

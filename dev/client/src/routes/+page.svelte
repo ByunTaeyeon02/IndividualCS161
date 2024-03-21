@@ -1,5 +1,5 @@
 <script lang="ts">
-	// TODO: add hint checkers|alerts|save numOfHintsUsed, implement nomOfHints+10hints per win, implement save numOfGiveUps
+	// TODO: add hint checkers|alerts|save numOfHintsUsed
 
 	import { onMount } from 'svelte';
 
@@ -32,6 +32,47 @@
 	let rightAnswerMsg = "";
 	let warningMsg = "";
 	let restMsg = "";
+
+	let checksLeft = 3;
+
+	// fetched data
+	let puzzleCompleted: number;
+	let numOfHints: number;
+	let numOfHintsUsed: number;
+	let numOfGiveUpsUsed: number;
+
+	let isLoggedIn: boolean;
+
+	async function isUserLoggedIn() {
+		try {
+			const response = await fetch('/protected');
+			const data = await response.json();
+			isLoggedIn = data.loggedIn;
+			if (isLoggedIn) {
+				getUserInfoFull();
+			} else {
+				puzzleCompleted = 0;
+				numOfHints = 10;
+				numOfHintsUsed = 0;
+				numOfGiveUpsUsed = 0;
+			}
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	}
+
+	async function getUserInfoFull() { 
+		try {
+			const response = await fetch('/getUserInfo');
+			const data = await response.json();
+			puzzleCompleted = data.puzzleCompleted;
+			numOfHints = data.numOfHints;
+			numOfHintsUsed = data.numOfHintsUsed;
+			numOfGiveUpsUsed = data.numOfGiveUpsUsed;
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	}
 	
 	async function generatePuzzle() {
 		try {
@@ -42,6 +83,7 @@
 			getStringDisplay();
 			showRightAnswerMsg = false;
 			gaveUp = false;
+			checksLeft = 3;
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
@@ -59,7 +101,24 @@
 				}
 			}
 			translateTileToDisplay(tileGrid);
+			if (isLoggedIn)
+				addGiveUps(1);
+			else
+				numOfGiveUpsUsed += 1;
 			gaveUp = true;
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	}
+
+	async function addGiveUps(numOfGiveUpsAdded: number) {
+		try {
+			numOfGiveUpsUsed += numOfGiveUpsAdded;
+			const response = await fetch('/setNumOfGiveUpsUsed', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({numOfGiveUpsUsed: numOfGiveUpsUsed})
+			});
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
@@ -147,8 +206,8 @@
 	}
 	
 	onMount(() => {
+		isUserLoggedIn();
         generatePuzzle();
-		getStringDisplay();
 	});
 
 	function toggleColor(row: number, col: number) {
@@ -189,11 +248,49 @@
 				showRightAnswerMsg = true;
 				showWrongAnswerMsg = false;
 				rightAnswerMsg = "Congrats (+10 Hints)! New Puzzle?";
+				if (isLoggedIn) {
+					addHints(10);
+					addPuzzleCompleted(1);
+				} else {
+					numOfHints += 10;
+					puzzleCompleted += 1;
+				}
+				console.log(numOfHints);
 			} else {
 				showRightAnswerMsg = false;
 				showWrongAnswerMsg = true;
-				wrongAnswerMsg = "Number of Incorrect Tile(s): " + numWrong;
+				checksLeft -= 1;
+				wrongAnswerMsg = "Number of Incorrect Tile(s): " + numWrong + " (" + checksLeft + " checks left)";
+				if (checksLeft == 0) {
+					showSolution();
+				}
 			}
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	}
+
+	async function addHints(numOfHintsAdded: number) {
+		try {
+			numOfHints += numOfHintsAdded;
+			const response = await fetch('/setNumOfHints', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({numOfHints: numOfHints})
+			});
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	}
+
+	async function addPuzzleCompleted(puzzleCompletedAdded: number) {
+		try {
+			puzzleCompleted += puzzleCompletedAdded;
+			const response = await fetch('/setPuzzleCompleted', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({puzzleCompleted: puzzleCompleted})
+			});
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
@@ -350,8 +447,58 @@
 					</table>
 				</div>
 			</div>
+			<div class="padding"></div>
+			<div class="text-center">
+				<div class="card w-300 shadow-xl pl-5 pb-4 rounded-3xl">
+					<div class="overflow-x-auto">
+						<table class="table" style="width: 100%;">
+							<tbody>
+								<tr>
+									<th>User Type</th>
+									{#if isLoggedIn}
+										<td>Regular User</td>
+									{:else}
+										<td>Guest</td>
+									{/if}
+								</tr>
+								<tr>
+									<th>Checks Left</th>
+									<td>{checksLeft}</td>
+								</tr>
+								<tr>
+									<th>Puzzle(s) Completed</th>
+									<td>{puzzleCompleted}</td>
+								</tr>
+								<tr>
+									<th>Hint(s) Left</th>
+									<td>{numOfHints}</td>
+								</tr>
+								<tr>
+									<th>Hint(s) Used</th>
+									<td>{numOfHintsUsed}</td>
+								</tr>
+								<tr>
+									<th>Give Up(s)</th>
+									<td>{numOfGiveUpsUsed}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<button class="btn btn-link" onclick="tutorial.showModal()">Click here to learn how to play</button>
+			</div>
 		</div>
 	</section>
+	<dialog id="tutorial" class="modal">
+		<div class="modal-box">
+			<form method="dialog">
+				<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+			</form>
+			<div>
+				<p class="font-bold text-xl">Tutorial</p>
+			</div>
+		</div>
+	</dialog>
 </html>
 
 <style>
@@ -364,11 +511,7 @@
 	}
 
 	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 0.6;
+		flex: 0.5;
 	}
 
 	.gray {
@@ -414,7 +557,7 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		height: 90vh;
+		height: 85vh;
 	}
 
 	.displayTableString {
@@ -429,7 +572,29 @@
 		padding: 0;
 	}
 
+	.padding {
+		padding-right: 0%;
+		padding-bottom: 2vh;
+	}
+
+	tr {
+		font-size: medium;
+	}
+
     @media (min-width: 1400px) {
+		.gameScreen {
+			flex-direction: row;
+		}
+
+		.padding {
+			padding-right: 2vw;
+			padding-bottom: 0%;
+		}
+
+		tr {
+			font-size: large;
+		}
+
         .tile {
 			width: 5vw;
 			height: 5vw;

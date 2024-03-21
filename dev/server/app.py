@@ -199,11 +199,13 @@ def login():
     return jsonify({'message': 'Invalid username or password'})
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return jsonify({'message': 'Logged out successfully'})
 
 @app.route("/getDarkMode")
+@login_required
 def getDarkMode():
     if current_user.is_authenticated:
         return jsonify({'darkModeOn': current_user.darkModeOn})
@@ -211,6 +213,7 @@ def getDarkMode():
         return jsonify({'message': 'User not authenticated'}), 401
 
 @app.route("/setDarkMode", methods=['POST'])
+@login_required
 def setDarkMode():
     if current_user.is_authenticated:
         data = request.get_json()
@@ -222,6 +225,7 @@ def setDarkMode():
         return jsonify({'message': 'User not authenticated'}), 401
     
 @app.route("/getPuzzleCompleted")
+@login_required
 def getPuzzleCompleted():
     if current_user.is_authenticated:
         return jsonify({'puzzleCompleted': current_user.puzzleCompleted})
@@ -229,6 +233,7 @@ def getPuzzleCompleted():
         return jsonify({'message': 'User not authenticated'}), 401
     
 @app.route("/setPuzzleCompleted", methods=['POST'])
+@login_required
 def setPuzzleCompleted():
     if current_user.is_authenticated:
         data = request.get_json()
@@ -240,6 +245,7 @@ def setPuzzleCompleted():
         return jsonify({'message': 'User not authenticated'}), 401
     
 @app.route("/getNumOfHints")
+@login_required
 def getNumOfHints():
     if current_user.is_authenticated:
         return jsonify({'numOfHints': current_user.numOfHints})
@@ -247,17 +253,19 @@ def getNumOfHints():
         return jsonify({'message': 'User not authenticated'}), 401
     
 @app.route("/setNumOfHints", methods=['POST'])
+@login_required
 def setNumOfHints():
     if current_user.is_authenticated:
         data = request.get_json()
         numOfHints = data.get('numOfHints')
         current_user.numOfHints = numOfHints
         db.session.commit()
-        return jsonify({'numOfHints': current_user.numOfHints})
+        return jsonify({'message': str(numOfHints) + ' added'})
     else:
         return jsonify({'message': 'User not authenticated'}), 401
     
 @app.route("/getNumOfHintsUsed")
+@login_required
 def getNumOfHintsUsed():
     if current_user.is_authenticated:
         return jsonify({'numOfHintsUsed': current_user.numOfHintsUsed})
@@ -265,6 +273,7 @@ def getNumOfHintsUsed():
         return jsonify({'message': 'User not authenticated'}), 401
     
 @app.route("/setNumOfHintsUsed", methods=['POST'])
+@login_required
 def setNumOfHintsUsed():
     if current_user.is_authenticated:
         data = request.get_json()
@@ -276,6 +285,7 @@ def setNumOfHintsUsed():
         return jsonify({'message': 'User not authenticated'}), 401
     
 @app.route("/getNumOfGiveUpsUsed")
+@login_required
 def getNumOfGiveUpsUsed():
     if current_user.is_authenticated:
         return jsonify({'numOfGiveUpsUsed': current_user.numOfGiveUpsUsed})
@@ -283,6 +293,7 @@ def getNumOfGiveUpsUsed():
         return jsonify({'message': 'User not authenticated'}), 401
     
 @app.route("/setNumOfGiveUpsUsed", methods=['POST'])
+@login_required
 def setNumOfGiveUpsUsed():
     if current_user.is_authenticated:
         data = request.get_json()
@@ -294,6 +305,7 @@ def setNumOfGiveUpsUsed():
         return jsonify({'message': 'User not authenticated'}), 401
     
 @app.route("/getUserInfo")
+@login_required
 def getUserInfo():
     if current_user.is_authenticated:
         return jsonify({'username': current_user.username, 
