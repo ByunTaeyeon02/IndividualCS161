@@ -1,6 +1,4 @@
 <script lang="ts">
-	// TODO: add hint checkers|alerts|save numOfHintsUsed
-
 	import { onMount } from 'svelte';
 
 	let tileGrid: any[] = [];
@@ -135,6 +133,26 @@
 			});
 			const data = await response.json();
 			DisplayedGrid[row][col] = data.value;
+			if (isLoggedIn) {
+				addHints(-1);
+				addHintsUsed(1);
+			} else {
+				numOfHints -= 1;
+				numOfHintsUsed += 1;
+			}
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	}
+
+	async function addHintsUsed(numOfHintsUsedAdded: number) {
+		try {
+			numOfHintsUsed += numOfHintsUsedAdded;
+			const response = await fetch('/setNumOfHintsUsed', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({numOfHintsUsed: numOfHintsUsed})
+			});
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
@@ -214,8 +232,14 @@
 		if (!gaveUp) {
 			const currentValue = DisplayedGrid[row][col];
 			if (hintOn) {
-				if (typeof currentValue === 'number') { 
-					getHint(row, col);
+				if (numOfHints > 0) {
+					if (typeof currentValue === 'number') { 
+						getHint(row, col);
+						hintOn = false;
+					}
+				} else {
+					showWarningMsg = true;
+					warningMsg = "No hints left";
 					hintOn = false;
 				}
 			} else {
