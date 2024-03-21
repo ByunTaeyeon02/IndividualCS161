@@ -385,19 +385,19 @@
 		{/if}
 	</div>
 	<section>
-		<div class="gameScreen">
-			<div class="card w-300 shadow-xl pr-10 pb-6 pt-4 rounded-3xl">
+		<div class="gameScreen pb-20 pt-20">
+			<div class="card shadow-xl pr-10 pb-6 pt-4 rounded-3xl">
 				<div class="card-body">
-					<table style="max-height: 90vh; overflow-y: auto; border-collapse: collapse;">
+					<table style="border-collapse: collapse;">
 						{#each DisplayedGrid as row, rowIndex}
 							<tr>
 								{#each row as value, colIndex}
 									{#if rowIndex === 0}	
-										<td style="vertical-align: bottom; text-align: center">
+										<td style="vertical-align: bottom; text-align: center; width: auto;">
 											<span class="top displayTableString">{value}</span>
 										</td>
 									{:else}
-										<td style="text-align: right">
+										<td style="text-align: right; width: auto;">
 											{#if typeof value === 'number'}
 												<button class="btn tile shadow-xl" class:gray={value === 0} class:black={value === 1} class:white={value === 2} on:click={() => toggleColor(rowIndex, colIndex)}></button>
 											{:else}
@@ -449,7 +449,7 @@
 			</div>
 			<div class="padding"></div>
 			<div class="text-center">
-				<div class="card w-300 shadow-xl pl-5 pb-4 rounded-3xl">
+				<div class="card w-300 shadow-xl pl-5 pb-4 pt-4 rounded-3xl">
 					<div class="overflow-x-auto">
 						<table class="table" style="width: 100%;">
 							<tbody>
@@ -458,7 +458,7 @@
 									{#if isLoggedIn}
 										<td>Regular User</td>
 									{:else}
-										<td>Guest</td>
+										<td>Guest: progress not saved</td>
 									{/if}
 								</tr>
 								<tr>
@@ -511,7 +511,7 @@
 	}
 
 	section {
-		flex: 0.5;
+		flex: 0.4;
 	}
 
 	.gray {
@@ -537,19 +537,28 @@
 	.giveUp {
 		width: 9vw;
 		height: 7.5vw;
-		border-radius: 1.5vw 3vw;
+		border-radius: 10px 20px;
+		min-width: 75px;
+		max-width: 90px;
+		max-height: 75px;
 	}
 
 	.middleBut {
-		width: 7.5vw;
-		height: 5vw;
-		border-radius: 2vw;
+		width: 6.5vw;
+		height: 4vw;
+		border-radius: 20px;
+		min-width: 70px;
+		max-width: 75px;
+		min-width: 50px;
 	}
 
 	.check {
 		width: 9vw;
 		height: 7.5vw;
-		border-radius: 3vw 1.5vw;
+		border-radius: 20px 10px;
+		min-width: 75px;
+		max-width: 90px;
+		max-height: 75px;
 	}
 
 	.gameScreen {
@@ -557,7 +566,8 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		height: 85vh;
+		max-height: 85vh;
+		overflow-y: auto;
 	}
 
 	.displayTableString {
@@ -570,6 +580,10 @@
 		align-items: center;
 		margin: 0;
 		padding: 0;
+		min-width: 60px;
+		min-height: 60px;
+		max-width: 75px;
+		max-height: 75px;
 	}
 
 	.padding {
@@ -581,7 +595,7 @@
 		font-size: medium;
 	}
 
-    @media (min-width: 1400px) {
+    @media (min-width: 1300px) {
 		.gameScreen {
 			flex-direction: row;
 		}
@@ -598,27 +612,34 @@
         .tile {
 			width: 5vw;
 			height: 5vw;
+			max-width: 100px;
+			max-height: 100px;
 		}
 
 		.giveUp {
 			width: 5.5vw;
 			height: 5vw;
-			border-radius: 1vw 2vw;
-			font-size: 1vw;
+			border-radius: 15px 25px;
+			font-size: 1.25vh;
+			max-width: 110px;
+			max-height: 75px;
 		}
 
 		.middleBut {
 			width: 5vw;
 			height: 3vw;
-			border-radius: 1vw;
-			font-size: 1vw;
+			font-size: 1.25vh;
+			max-width: 90px;
+			max-height: 55px;
 		}
 
 		.check {
 			width: 5.5vw;
 			height: 5vw;
-			border-radius: 2vw 1vw;
-			font-size: 1vw;
+			border-radius: 25px 15px;
+			font-size: 1.25vh;
+			max-width: 110px;
+			max-height: 75px;
 		}
 
 		.displayTableString {
