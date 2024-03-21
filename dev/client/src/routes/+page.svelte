@@ -448,8 +448,8 @@
 				</div>
 			</div>
 			<div class="padding"></div>
-			<div class="text-center">
-				<div class="card w-300 shadow-xl pl-5 pb-4 pt-4 rounded-3xl">
+			<div class="text-center" style="display: flex; flex-direction: column;">
+				<div class="card shadow-xl pl-5 pb-4 pt-4 rounded-3xl stats">
 					<div class="overflow-x-auto">
 						<table class="table" style="width: 100%;">
 							<tbody>
@@ -505,6 +505,11 @@
 	@import 'tailwindcss/base';
 	@import 'tailwindcss/components';
 	@import 'tailwindcss/utilities';
+
+	.stats {
+		width: 85vw;
+		max-width: 500px;
+	}
 
 	button,span,input {
 		font-family: 'BadComic';
