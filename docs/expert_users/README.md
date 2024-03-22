@@ -10,7 +10,11 @@
 		- Open cmd
 		- cd into the desired folder
 		- git clone https://github.com/ByunTaeyeon02/TileFlip.git
-- ### __Building website__ ###
+- ### __Building Using Docker (NEW)__ ###
+	- Download VS Code and open the project inside the previously selected folder
+	- docker run -p 8080:8080 tileflip
+ 	- open http://localhost:8080/ on the browser to see the website
+- ### __Building website (OLD)__ ###
 	- Download VS Code and open the project inside the previously selected folder
 	- cd into dev
 	- Instal things like Flask and Python if you don’t have it on your machine
