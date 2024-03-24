@@ -408,118 +408,162 @@
 			</div>
 		{/if}
 	</div>
-	<section>
-		<div class="gameScreen pb-20 pt-20">
-			<div class="card shadow-xl pr-10 pb-6 pt-4 rounded-3xl">
-				<div class="card-body">
-					<table style="border-collapse: collapse;">
-						{#each DisplayedGrid as row, rowIndex}
-							<tr>
-								{#each row as value, colIndex}
-									{#if rowIndex === 0}	
-										<td style="vertical-align: bottom; text-align: center; width: auto;">
-											<span class="top displayTableString">{value}</span>
-										</td>
-									{:else}
-										<td style="text-align: right; width: auto;">
-											{#if typeof value === 'number'}
-												<button class="btn tile shadow-xl" class:gray={value === 0} class:black={value === 1} class:white={value === 2} on:click={() => toggleColor(rowIndex, colIndex)}></button>
-											{:else}
-												<span class="side displayTableString pr-5">{value}</span>
-											{/if}
-										</td>
-									{/if}
-								{/each}
-							</tr>
-						{/each}
-						{#if gaveUp}
-							<tr>
-								<td></td>
-								<td colspan="5" style="text-align: center;">
-									<div class="form-control">
-										<label class="label cursor-pointer">
-										  <span class="label-text">Correct Solution</span> 
-										  <input type="checkbox" class="toggle toggle-lg" bind:checked={showSolutionAnswer} on:click={toggleAnswers}/>
-										  <span class="label-text">Your Answer</span> 
-										</label>
+	<div class="gameScreen pb-20 pt-16">
+		<div class="card shadow-xl pr-10 pb-6 pt-4 rounded-3xl">
+			<div class="card-body">
+				<table style="border-collapse: collapse;">
+					{#each DisplayedGrid as row, rowIndex}
+						<tr>
+							{#each row as value, colIndex}
+								{#if rowIndex === 0}	
+									<td style="vertical-align: bottom; text-align: center; width: auto;">
+										<span class="top displayTableString">{value}</span>
+									</td>
+								{:else}
+									<td style="text-align: right; width: auto;">
+										{#if typeof value === 'number'}
+											<button class="btn tile shadow-xl" class:gray={value === 0} class:black={value === 1} class:white={value === 2} on:click={() => toggleColor(rowIndex, colIndex)}></button>
+										{:else}
+											<span class="side displayTableString pr-5">{value}</span>
+										{/if}
+									</td>
+								{/if}
+							{/each}
+						</tr>
+					{/each}
+					{#if gaveUp}
+						<tr>
+							<td></td>
+							<td colspan="5" style="text-align: center;">
+								<div class="form-control">
+									<label class="label cursor-pointer">
+									  <span class="label-text">Correct Solution</span> 
+									  <input type="checkbox" class="toggle toggle-lg" bind:checked={showSolutionAnswer} on:click={toggleAnswers}/>
+									  <span class="label-text">Your Answer</span> 
+									</label>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td colspan="5" style="text-align: center;">
+								<div>
+									<button class="btn btn-outline shadow-xl" style="width: 100%" on:click={generatePuzzle}>Generate New Puzzle</button>
+								</div>
+							</td>
+						</tr>
+					{:else}
+						<tr>
+							<td></td>
+							<td colspan="5" style="text-align: center;">
+								<div style="display: flex; justify-content: space-around; margin-top: 1vw;">
+									<button class="btn btn-outline giveUp shadow-xl" on:click={showSolution}>Give Up</button>
+									<button class="btn btn-outline middleBut shadow-xl" on:click={confirmReset}>Reset</button>
+									<div class="tooltip" data-tip="Click on a tile to see correct color">
+										<input class="btn btn-outline middleBut shadow-xl" type="checkbox" bind:checked={hintOn} aria-label="Hint"/>
 									</div>
-								</td>
+									<button class="btn btn-outline check shadow-xl" on:click={checkUserAnswer}>Check</button>
+								</div>
+							</td>
+						</tr>
+					{/if}
+				</table>
+			</div>
+		</div>
+		<div class="padding"></div>
+		<div class="text-center" style="display: flex; flex-direction: column;">
+			<div class="card shadow-xl pl-5 pb-4 pt-4 rounded-3xl stats">
+				<div>
+					<table class="table" style="width: 100%;">
+						<tbody>
+							<tr>
+								<th>User Type</th>
+								{#if isLoggedIn}
+									<td>Regular User</td>
+								{:else}
+									<td>Guest: progress not saved</td>
+								{/if}
 							</tr>
 							<tr>
-								<td></td>
-								<td colspan="5" style="text-align: center;">
-									<div>
-										<button class="btn btn-outline shadow-xl" style="width: 100%" on:click={generatePuzzle}>Generate New Puzzle</button>
-									</div>
-								</td>
+								<th>Checks Left</th>
+								<td>{checksLeft}</td>
 							</tr>
-						{:else}
 							<tr>
-								<td></td>
-								<td colspan="5" style="text-align: center;">
-									<div style="display: flex; justify-content: space-around; margin-top: 1vw;">
-										<button class="btn btn-outline giveUp shadow-xl" on:click={showSolution}>Give Up</button>
-										<button class="btn btn-outline middleBut shadow-xl" on:click={confirmReset}>Reset</button>
-										<div class="tooltip" data-tip="Click on a tile to see correct color">
-											<input class="btn btn-outline middleBut shadow-xl" type="checkbox" bind:checked={hintOn} aria-label="Hint"/>
-										</div>
-										<button class="btn btn-outline check shadow-xl" on:click={checkUserAnswer}>Check</button>
-									</div>
-								</td>
+								<th>Puzzle(s) Completed</th>
+								<td>{puzzleCompleted}</td>
 							</tr>
-						{/if}
+							<tr>
+								<th>Hint(s) Left</th>
+								<td>{numOfHints}</td>
+							</tr>
+							<tr>
+								<th>Hint(s) Used</th>
+								<td>{numOfHintsUsed}</td>
+							</tr>
+							<tr>
+								<th>Give Up(s)</th>
+								<td>{numOfGiveUpsUsed}</td>
+							</tr>
+						</tbody>
 					</table>
 				</div>
 			</div>
-			<div class="padding"></div>
-			<div class="text-center" style="display: flex; flex-direction: column;">
-				<div class="card shadow-xl pl-5 pb-4 pt-4 rounded-3xl stats">
-					<div class="overflow-x-auto">
-						<table class="table" style="width: 100%;">
-							<tbody>
-								<tr>
-									<th>User Type</th>
-									{#if isLoggedIn}
-										<td>Regular User</td>
-									{:else}
-										<td>Guest: progress not saved</td>
-									{/if}
-								</tr>
-								<tr>
-									<th>Checks Left</th>
-									<td>{checksLeft}</td>
-								</tr>
-								<tr>
-									<th>Puzzle(s) Completed</th>
-									<td>{puzzleCompleted}</td>
-								</tr>
-								<tr>
-									<th>Hint(s) Left</th>
-									<td>{numOfHints}</td>
-								</tr>
-								<tr>
-									<th>Hint(s) Used</th>
-									<td>{numOfHintsUsed}</td>
-								</tr>
-								<tr>
-									<th>Give Up(s)</th>
-									<td>{numOfGiveUpsUsed}</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-				<button class="btn btn-link" onclick="tutorial.showModal()">Click here to learn how to play</button>
-			</div>
+			<button class="btn btn-link" onclick="tutorial.showModal()">Click here to learn how to play</button>
 		</div>
-	</section>
+	</div>
 	<dialog id="tutorial" class="modal">
-		<div class="modal-box">
+		<div class="modal-box w-8/10 max-w-5xl">
 			<form method="dialog">
 				<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
 			</form>
 			<div>
-				<p class="font-bold text-xl">Tutorial</p>
+				<p class="font-bold text-2xl">Tutorial</p>
+				<table>
+					<tr>
+						<td><div class="pb-2"></div></td>
+					</tr>
+					<tr>
+						<td colspan="2" class="font-bold">Game:</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><p>+ You are trying to color the tiles based on the rules in the rows/columns</p></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><p>+ Ex: if the collumn rule states "4" then that means that for that collumn there will be 4 black tiles with no space in between</p></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><p>+ Ex: if the row rule states "2 2" then that means that for that row there will be 2 black tiles and another 2 black tiles but there is a space in between the black squares</p></td>
+					</tr>
+					<tr>
+						<td><div class="pb-4"></div></td>
+					</tr>
+					<tr>
+						<td colspan="2" class="font-bold">Interatables:</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><p>+ Tiles: Click on tiles to flip and change color</p></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><p>+ Give up: Click show solution</p></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><p>+ Reset: Click to reset all tiles to gray</p></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><p>+ Hint: Select a tile after pressing hint button to see solution for that tile</p></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><p>+ Check: Click to check answer</p></td>
+					</tr>
+				</table>
 			</div>
 		</div>
 	</dialog>
@@ -537,10 +581,6 @@
 
 	button,span,input {
 		font-family: 'BadComic';
-	}
-
-	section {
-		flex: 0.4;
 	}
 
 	.gray {
@@ -595,8 +635,6 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		max-height: 85vh;
-		overflow-y: auto;
 	}
 
 	.displayTableString {
@@ -641,8 +679,8 @@
         .tile {
 			width: 5vw;
 			height: 5vw;
-			max-width: 100px;
-			max-height: 100px;
+			max-width: 80px;
+			max-height: 80px;
 		}
 
 		.giveUp {
@@ -650,7 +688,7 @@
 			height: 5vw;
 			border-radius: 15px 25px;
 			font-size: 1.25vh;
-			max-width: 110px;
+			max-width: 90px;
 			max-height: 75px;
 		}
 
@@ -658,7 +696,7 @@
 			width: 5vw;
 			height: 3vw;
 			font-size: 1.25vh;
-			max-width: 90px;
+			max-width: 70px;
 			max-height: 55px;
 		}
 
@@ -667,7 +705,7 @@
 			height: 5vw;
 			border-radius: 25px 15px;
 			font-size: 1.25vh;
-			max-width: 110px;
+			max-width: 90px;
 			max-height: 75px;
 		}
 
