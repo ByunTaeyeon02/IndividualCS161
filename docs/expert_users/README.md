@@ -1,5 +1,11 @@
 ## __Building product instructions (Tile Flip)__ ##
 
+- ### __Building Using Docker (NEW WIP)__ ###
+	- Download Docker
+ 	- docker pull anhton20/tileflip:latest
+  	- docker run -d -p 8080:8080 anhton20/tileflip:latest
+ 	- open http://localhost:8080/ on the browser to see the website
+
 - ### __Cloning GitHub project to computer__ ###
 	- (Option 1) Using GitHub Desktop
 		- Download the GitHub Desktop app and log in
@@ -10,10 +16,6 @@
 		- Open cmd
 		- cd into the desired folder
 		- git clone https://github.com/ByunTaeyeon02/TileFlip.git
-- ### __Building Using Docker (NEW)__ ###
-	- Download VS Code and open the project inside the previously selected folder
-	- docker run -p 8080:8080 tileflip
- 	- open http://localhost:8080/ on the browser to see the website
 - ### __Building website (OLD)__ ###
 	- Download VS Code and open the project inside the previously selected folder
 	- cd into dev
