@@ -319,7 +319,7 @@
 			console.error('Error fetching data:', error);
 		}
 	}
- 
+
 	function denyAlert() {
 		showRightAnswerMsg = false;
 		showResetMsg = false;
