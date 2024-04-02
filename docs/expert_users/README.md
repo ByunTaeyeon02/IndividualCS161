@@ -5,7 +5,7 @@
   	- or https://tile-flip-monogram-4b24b968e494.herokuapp.com/
  	- I'm working on getting domain from http to https
 
-- ### __Building Using Docker (NEW WIP)__ ###
+- ### __Building Using Docker (WIP)__ ###
 	- Download Docker
  	- docker pull anhton20/tileflip:latest
   	- docker run -d -p 8080:8080 anhton20/tileflip:latest
