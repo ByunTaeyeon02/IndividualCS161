@@ -102,7 +102,7 @@
 
 
 <style>
-	button,input,h1,h2,tr,td,div {
+	h2,tr,td,div {
 		font-family: 'BadComic';
 	}
 </style>
