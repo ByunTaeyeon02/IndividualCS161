@@ -149,8 +149,7 @@ def load_user(user_id):
 
 @app.route("/")
 def base():
-    current_directory = static_directory = os.path.join(os.getcwd(), 'dev', 'client', 'build')
-    return send_from_directory(static_directory, 'index.html')
+    return send_from_directory('../client/build', 'index.html')
 
 @app.route("/<path:path>")
 def home(path):
