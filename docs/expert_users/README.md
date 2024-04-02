@@ -1,5 +1,9 @@
 ## __Building product instructions (Tile Flip)__ ##
 
+- ### __No Installation Needed (Using Heroku)__ ##
+	- go to https://tile-flip-monogram-4b24b968e494.herokuapp.com/
+ 	- I'm working on getting a better domain only if it's not too expensive
+
 - ### __Building Using Docker (NEW WIP)__ ###
 	- Download Docker
  	- docker pull anhton20/tileflip:latest
@@ -32,7 +36,7 @@
 			- Paste and enter that link into the internet browser
    			- THIS IS NOT CONNECTED TO THE BACKEND
 	- cd into /server and run the server by typing 
-		- python app.py
+		- python offline.py
   			- This will give you a link to the website (Connected to the backend)
      			- Run this if you want to see the most updated version of the project
   		- Other dependencies (Install if needed):
