@@ -148,8 +148,10 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 @app.route("/")
-def base():
-    return send_from_directory('../client/build', 'index.html')
+def index():
+    return 'Welcome to your Flask application!'
+#def base():
+    #return send_from_directory('../client/build', 'index.html')
 
 @app.route("/<path:path>")
 def home(path):
