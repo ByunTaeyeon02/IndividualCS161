@@ -259,7 +259,7 @@
 </style>
 
 <header>
-	<div class="navbar bg-base-100 shadow-2xl">
+	<div class="navbar">
 		<div class="flex-1 pl-3"> 
 			<div class="logo-container">
 				<div class="w-10 rounded">

@@ -408,8 +408,8 @@
 			</div>
 		{/if}
 	</div>
-	<div class="gameScreen pb-20 pt-16">
-		<div class="card shadow-xl pr-10 pb-6 pt-4 rounded-3xl">
+	<div class="gameScreen pb-20">
+		<div class="card shadow-xl tileBoardPadding rounded-3xl">
 			<div class="card-body">
 				<table style="border-collapse: collapse;">
 					{#each DisplayedGrid as row, rowIndex}
@@ -574,12 +574,17 @@
 	@import 'tailwindcss/components';
 	@import 'tailwindcss/utilities';
 
+	.tileBoardPadding {
+		padding-right: 4vw;
+		padding-top: 2vh;
+	}
+
 	.stats {
 		width: 85vw;
 		max-width: 500px;
 	}
 
-	button,span,input {
+	button,span,input,th,tr,td {
 		font-family: 'BadComic';
 	}
 
@@ -604,30 +609,33 @@
 	}
 
 	.giveUp {
-		width: 9vw;
-		height: 7.5vw;
+		width: 8vw;
+		height: 7vw;
 		border-radius: 10px 20px;
-		min-width: 75px;
-		max-width: 90px;
-		max-height: 75px;
+		min-width: 55px;
+		max-width: 75px;
+		max-height: 55px;
+		font-size: small;
 	}
 
 	.middleBut {
 		width: 6.5vw;
-		height: 4vw;
+		height: 3vw;
 		border-radius: 20px;
-		min-width: 70px;
-		max-width: 75px;
-		min-width: 50px;
+		min-width: 45px;
+		max-width: 65px;
+		max-height: 40px;
+		font-size: small;
 	}
 
 	.check {
-		width: 9vw;
-		height: 7.5vw;
+		width: 8vw;
+		height: 7vw;
 		border-radius: 20px 10px;
-		min-width: 75px;
-		max-width: 90px;
-		max-height: 75px;
+		min-width: 55px;
+		max-width: 75px;
+		max-height: 55px;
+		font-size: small;
 	}
 
 	.gameScreen {
@@ -635,22 +643,23 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+		padding-top: 5vh;
 	}
 
 	.displayTableString {
-		font-size: 2.5vw;
+		font-size: medium;
 	}
 
 	.tile {
-		width: 8vw;
-		height: 8vw;
+		width: 6vw;
+		height: 6vw;
 		align-items: center;
 		margin: 0;
 		padding: 0;
-		min-width: 60px;
-		min-height: 60px;
-		max-width: 75px;
-		max-height: 75px;
+		min-width: 50px;
+		min-height: 50px;
+		max-width: 60px;
+		max-height: 60px;
 	}
 
 	.padding {
@@ -659,12 +668,17 @@
 	}
 
 	tr {
-		font-size: medium;
+		font-size: small;
 	}
 
     @media (min-width: 1300px) {
 		.gameScreen {
 			flex-direction: row;
+		}
+
+		.tileBoardPadding {
+			padding-right: 20px;
+			padding-top: 2vh;
 		}
 
 		.padding {
@@ -673,44 +687,46 @@
 		}
 
 		tr {
-			font-size: large;
+			font-size: medium;
 		}
 
         .tile {
-			width: 5vw;
-			height: 5vw;
-			max-width: 80px;
-			max-height: 80px;
+			width: 4vh;
+			height: 4vh;
+			min-width: 60px;
+			min-height: 60px;
+			max-width: 70px;
+			max-height: 70px;
 		}
 
 		.giveUp {
-			width: 5.5vw;
-			height: 5vw;
+			width: 5vw;
+			height: 4vw;
 			border-radius: 15px 25px;
-			font-size: 1.25vh;
-			max-width: 90px;
-			max-height: 75px;
+			max-width: 65px;
+			max-height: 65px;
+			font-size: medium;
 		}
 
 		.middleBut {
-			width: 5vw;
-			height: 3vw;
-			font-size: 1.25vh;
-			max-width: 70px;
-			max-height: 55px;
+			width: 3.5vw;
+			height: 1vw;
+			max-width: 60px;
+			max-height: 45px;
+			font-size: medium;
 		}
 
 		.check {
-			width: 5.5vw;
-			height: 5vw;
+			width: 5vw;
+			height: 4vw;
 			border-radius: 25px 15px;
-			font-size: 1.25vh;
-			max-width: 90px;
-			max-height: 75px;
+			max-width: 65px;
+			max-height: 65px;
+			font-size: medium;
 		}
 
 		.displayTableString {
-			font-size: 1.5vw;
+			font-size: medium;
 		}
     }
 
