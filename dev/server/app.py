@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user, UserMixin
 from flask_session import Session
 import random
+import os
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
@@ -138,7 +139,9 @@ def getRowString(curCol):
         row_string += str(tileGridAnswer[row][curCol]) + " "
     return row_string.strip()
 
-
+@app.route('/favicon.ico')
+def favicon():
+     return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -351,7 +354,6 @@ def getHint():
     value = tileGridAnswer[row - 1][col - 1]
     return jsonify({'value': value})
 
-import os
 
 if __name__ == '__main__':
     with app.app_context():
