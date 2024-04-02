@@ -3,7 +3,7 @@
 - ### __No Installation Needed (Using Heroku)__ ##
 	- go to http://www.tileflip-monogram.com/
   	- or https://tile-flip-monogram-4b24b968e494.herokuapp.com/
- 	- I'm working on getting a better domain only if it's not too expensive
+ 	- I'm working on getting domain from http to https
 
 - ### __Building Using Docker (NEW WIP)__ ###
 	- Download Docker
