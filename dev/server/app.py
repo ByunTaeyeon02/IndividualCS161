@@ -149,9 +149,10 @@ def load_user(user_id):
 
 @app.route("/")
 def base():
-    return send_from_directory('dev/client/build', 'index.html')
-    #current_directory = os.getcwd()
-    #return f'Current working directory: {current_directory}'
+    current_directory = os.getcwd()
+    directory_content = os.listdir(current_directory)
+    directory_content_str = "\n".join(directory_content)
+    return f'Current working directory: {current_directory}\nFiles and Directories:\n{directory_content_str}'
 #def base():
     #return send_from_directory('../client/build', 'index.html')
 
