@@ -149,12 +149,13 @@ def load_user(user_id):
 
 @app.route("/")
 def base():
-    current_directory = static_directory = os.path.join(os.getcwd(), 'dev', 'client', 'build')
+    static_directory = os.path.join(os.getcwd(), 'dev', 'client', 'build')
     return send_from_directory(static_directory, 'index.html')
 
 @app.route("/<path:path>")
 def home(path):
-    return send_from_directory('../client/build', path)
+    static_directory = os.path.join(os.getcwd(), 'dev', 'client', 'build')
+    return send_from_directory(static_directory, path)
 
 @app.route('/protected')
 def protected():
