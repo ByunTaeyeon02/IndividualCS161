@@ -1,7 +1,8 @@
 ## __Building product instructions (Tile Flip)__ ##
 
 - ### __No Installation Needed (Using Heroku)__ ##
-	- go to https://tile-flip-monogram-4b24b968e494.herokuapp.com/
+	- go to http://www.tileflip-monogram.com/
+  	- or https://tile-flip-monogram-4b24b968e494.herokuapp.com/
  	- I'm working on getting a better domain only if it's not too expensive
 
 - ### __Building Using Docker (NEW WIP)__ ###
