@@ -321,7 +321,29 @@ def getUserInfo():
     else:
         return jsonify({'message': 'User not authenticated'}), 401
     
-
+@app.route("/setUsername", methods=['POST'])
+@login_required
+def setUsername():
+    if current_user.is_authenticated:
+        data = request.get_json()
+        username = data.get('username')
+        current_user.username = username
+        db.session.commit()
+        return jsonify({'username': current_user.username})
+    else:
+        return jsonify({'message': 'User not authenticated'}), 401
+    
+@app.route("/setPassword", methods=['POST'])
+@login_required
+def setPassword():
+    if current_user.is_authenticated:
+        data = request.get_json()
+        password = data.get('password')
+        current_user.password = password
+        db.session.commit()
+        return jsonify({'password': current_user.password})
+    else:
+        return jsonify({'message': 'User not authenticated'}), 401
 
 @app.route('/generateNewPuzzle')
 def generateNewPuzzle():

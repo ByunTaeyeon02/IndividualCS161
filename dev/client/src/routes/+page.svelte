@@ -294,6 +294,111 @@
 		}
 	}
 
+	function checkUserAnswer() {
+		let uncomplete = false;
+		for (let row = 0; row < 5; row++) {
+			for (let col = 0; col < 5; col++) {
+				if (DisplayedGrid[row + 1][col + 1] == 0)
+					uncomplete = true;
+			}
+		}
+		if (uncomplete) {
+			showWarningMsg = true;
+			warningMsg = "All tiles must be black or white";
+		} else {
+			checkAnswer2();
+		}
+	}
+
+	function checkAnswer2() {
+		let correct = true;
+
+		for (let i = 1; i <= 5; i++) {
+			correct = correct && checkCol(i);
+			//console.log(checkCol(i));
+		}
+
+		for (let i = 1; i <= 5; i++) {
+			correct = correct && checkRow(i);
+			//console.log(checkRow(i));
+		}
+
+		if (correct) {
+			showRightAnswerMsg = true;
+			showWrongAnswerMsg = false;
+			rightAnswerMsg = "Congrats (+10 Hints)! New Puzzle?";
+			if (isLoggedIn) {
+				addHints(10);
+				addPuzzleCompleted(1);
+			} else {
+				numOfHints += 10;
+				puzzleCompleted += 1;
+			}
+			console.log(numOfHints);
+		} else {
+			showRightAnswerMsg = false;
+			showWrongAnswerMsg = true;
+			checksLeft -= 1;
+			wrongAnswerMsg = (checksLeft + " checks left");
+			if (checksLeft == 0) {
+				showSolution();
+			}
+		}
+	}
+
+	function checkRow(col: number) {
+		let checkString = DisplayedGrid[col][0];
+		let rowAnswer = "";
+		for (let i = 1; i <= 5; i++) {
+			rowAnswer += DisplayedGrid[col][i];
+		}
+		//console.log(checkString + " : " + rowAnswer);
+		
+		let splittedArray = checkString.toString().split(" ");
+		let regex = "^2*";
+		for (let i = 0; i < splittedArray.length - 1; i++) {
+			regex += `1{${splittedArray[i]}}`;
+			if (i != splittedArray.length - 2) {
+				regex += "2+";
+			}
+		}
+		regex += "2*$"; 
+
+		const regexPattern = new RegExp(regex);
+		if (regexPattern.test(rowAnswer)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	function checkCol(row: number) {
+		let checkString = DisplayedGrid[0][row];
+		let colAnswer = "";
+		for (let i = 1; i <= 5; i++) {
+			colAnswer += DisplayedGrid[i][row];
+		}
+		//console.log(checkString + " : " + colAnswer);
+
+		let splittedArray = checkString.toString().split("\n");
+		let regex = "^2*";
+		for (let i = 0; i < splittedArray.length - 1; i++) {
+			regex += `1{${splittedArray[i]}}`;
+			if (i != splittedArray.length - 2) {
+				regex += "2+";
+			}
+		}
+		regex += "2*$"; 
+
+		const regexPattern = new RegExp(regex);
+		//console.log(regexPattern);
+		if (regexPattern.test(colAnswer)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	async function addHints(numOfHintsAdded: number) {
 		try {
 			numOfHints += numOfHintsAdded;
@@ -328,22 +433,6 @@
 	function confirmReset() {
 		showResetMsg = true;
 		restMsg = "Revert all tiles to gray?";
-	}
-
-	function checkUserAnswer() {
-		let uncomplete = false;
-		for (let row = 0; row < 5; row++) {
-			for (let col = 0; col < 5; col++) {
-				if (DisplayedGrid[row + 1][col + 1] == 0)
-					uncomplete = true;
-			}
-		}
-		if (uncomplete) {
-			showWarningMsg = true;
-			warningMsg = "All tiles must be black or white";
-		} else {
-			checkAnswer();
-		}
 	}
 
 	function toggleAnswers() {
