@@ -341,7 +341,7 @@ def setPassword():
     if current_user.is_authenticated:
         data = request.get_json()
         password = data.get('password')
-        current_user.password = password
+        current_user.password = generate_password_hash(password)
         db.session.commit()
         return jsonify({'password': current_user.password})
     else:
