@@ -68,7 +68,7 @@
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({username: username})
 			});
-			username = "";
+			newUsername = "";
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
