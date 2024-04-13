@@ -57,7 +57,7 @@
 		if (newUsername !== "") {
 			console.log(newUsername);
 			username = newUsername;
-			setUsername(username);
+			setUsername(newUsername);
 		}
 	}
 

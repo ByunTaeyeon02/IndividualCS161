@@ -505,11 +505,11 @@
 						<tr>
 							{#each row as value, colIndex}
 								{#if rowIndex === 0}	
-									<td style="vertical-align: bottom; text-align: center; width: auto;">
+									<td style="vertical-align: bottom; text-align: center;">
 										<span class="top displayTableString">{value}</span>
 									</td>
 								{:else}
-									<td style="text-align: right; width: auto;">
+									<td style="text-align: right;">
 										{#if typeof value === 'number'}
 											<button class="btn tile shadow-xl" class:gray={value === 0} class:black={value === 1} class:white={value === 2} on:click={() => toggleColor(rowIndex, colIndex)}></button>
 										{:else}
@@ -615,41 +615,85 @@
 						<td colspan="2" class="font-bold">Game:</td>
 					</tr>
 					<tr>
-						<td></td>
 						<td><p>+ You are trying to color the tiles based on the rules in the rows/columns</p></td>
 					</tr>
 					<tr>
-						<td></td>
-						<td><p>+ Ex: if the collumn rule states "4" then that means that for that collumn there will be 4 black tiles with no space in between</p></td>
+						<td><p>+ Ex: if the row rule states "4" then that means that for that row there will be 4 black tiles with no space in between</p></td>
 					</tr>
 					<tr>
-						<td></td>
-						<td><p>+ Ex: if the row rule states "2 2" then that means that for that row there will be 2 black tiles and another 2 black tiles but there is a space in between the black squares</p></td>
+						<td>
+							<table style="border-collapse: collapse;">
+								<tr style="text-align: right;">
+									<td><span class="side displayTableString pr-5">4</span></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+								</tr>
+								<tr style="text-align: right;">
+									<td><span class="side displayTableString pr-5">4</span></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td><p>+ Ex: if the row rule states "1 2" then that means that for that row there will be 1 black tiles follow by atleast 1 white square and then another 2 black tiles</p></td>
+					</tr>
+					<tr>
+						<td>
+							<table style="border-collapse: collapse;">
+								<tr style="text-align: right;">
+									<td><span class="side displayTableString pr-5">1 2</span></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+								</tr>
+								<tr style="text-align: right;">
+									<td><span class="side displayTableString pr-5">1 2</span></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+								</tr>
+								<tr style="text-align: right;">
+									<td><span class="side displayTableString pr-5">1 2</span></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+								</tr>
+							</table>
+						</td>
 					</tr>
 					<tr>
 						<td><div class="pb-4"></div></td>
 					</tr>
 					<tr>
-						<td colspan="2" class="font-bold">Interatables:</td>
+						<td colspan="2" class="font-bold">Interactables:</td>
 					</tr>
 					<tr>
-						<td></td>
 						<td><p>+ Tiles: Click on tiles to flip and change color</p></td>
 					</tr>
 					<tr>
-						<td></td>
 						<td><p>+ Give up: Click show solution</p></td>
 					</tr>
 					<tr>
-						<td></td>
 						<td><p>+ Reset: Click to reset all tiles to gray</p></td>
 					</tr>
 					<tr>
-						<td></td>
 						<td><p>+ Hint: Select a tile after pressing hint button to see solution for that tile</p></td>
 					</tr>
 					<tr>
-						<td></td>
 						<td><p>+ Check: Click to check answer</p></td>
 					</tr>
 				</table>
