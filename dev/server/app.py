@@ -206,6 +206,11 @@ def current_user_id():
 def register():
     data = request.get_json()
     username = data.get('username')
+
+    existing_user = User.query.filter_by(username=username).first()
+    if existing_user:
+        return jsonify({'message': 'Username already exists'}), 400
+    
     password = data.get('password')
     userType = "Regular User"
     darkModeOn = data.get('darkModeOn')
@@ -220,7 +225,8 @@ def register():
                 numOfGiveUpsUsed=numOfGiveUpsUsed)
     db.session.add(user)
     db.session.commit()
-    return jsonify({'message': 'User registered successfully'})
+    login_user(user)
+    return jsonify({'message': 'User registered successfully'}), 201
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -362,6 +368,11 @@ def setUsername():
     if current_user.is_authenticated:
         data = request.get_json()
         username = data.get('username')
+
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            return jsonify({'message': 'Username already exists'}), 400
+
         current_user.username = username
         db.session.commit()
         return jsonify({'username': current_user.username})

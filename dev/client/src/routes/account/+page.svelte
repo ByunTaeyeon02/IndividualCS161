@@ -16,6 +16,12 @@
 	let newPassword2: string;
 	let newUsername: string;
 
+	// alerts
+	let successAlert = false;
+	let successMsg = "";
+	let warningAlert = false;
+	let warningMsg = "";
+
 	async function isUserLoggedIn() {
 		try {
 			const response = await fetch('/protected');
@@ -55,9 +61,11 @@
 
 	function changeUsername() {
 		if (newUsername !== "") {
-			console.log(newUsername);
-			username = newUsername;
 			setUsername(newUsername);
+		} else {
+			successAlert = false;
+			warningAlert = true;
+			warningMsg = "Username cannot be blank";
 		}
 	}
 
@@ -68,7 +76,20 @@
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({username: username})
 			});
-			newUsername = "";
+			const data = await response.json();
+			let message = data.message;
+
+			if (message === "User registered successfully") {
+				username = newUsername;
+				newUsername = "";
+				successAlert = true;
+				warningAlert = false;
+				successMsg = "Username changed successfully";
+			} else {
+				successAlert = false;
+				warningAlert = true;
+				warningMsg = message;
+			}
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
@@ -76,8 +97,15 @@
 
 	function changePassword() {
 		if (newPassword1 === newPassword2 && newPassword1 !== "") {
-			console.log(newPassword1);
 			setPassword(newPassword1);
+		} else if (newPassword1 !== newPassword2) {
+			successAlert = false;
+			warningAlert = true;
+			warningMsg = "Passwords do not match";
+		} else {
+			successAlert = false;
+			warningAlert = true;
+			warningMsg = "Password cannot be blank";
 		}
 	}
 
@@ -90,10 +118,26 @@
 			});
 			newPassword1 = "";
 			newPassword2 = "";
+			successAlert = true;
+			warningAlert = false;
+			successMsg = "Password changed successfully";
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
 	}
+
+	$: {
+		if (successAlert) {
+			setTimeout(() => {
+				successAlert = false;
+			}, 2500);
+		}
+		if (warningAlert) {
+			setTimeout(() => {
+				warningAlert = false;
+			}, 2500);
+		}
+  	} 
 </script>
 
 <svelte:head>
@@ -101,6 +145,17 @@
 </svelte:head>
 
 <div class="text-column pt-10">
+	{#if successAlert}	
+		<div role="alert" class="alert">
+			<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+			<span>{successMsg}</span>
+		</div>
+	{:else if warningAlert}
+		<div role="alert" class="alert">
+			<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+			<span>{warningMsg}</span>
+		</div>
+	{/if}
 	<div class="pb-6">
 		<h1>Account Settings</h1>
 	</div>
@@ -200,7 +255,14 @@
 
 
 <style>
-	button,input,h1,tr,td {
-		font-family: 'BadComic';
-	}
+	
+
+	.alert {
+        position: fixed;
+        top: 2vh;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 500px;
+        z-index: 1000;
+    }
 </style>

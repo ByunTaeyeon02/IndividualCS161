@@ -174,7 +174,5 @@
 </div>
 
 <style>
-	h2,tr,td,div,th,div,p {
-		font-family: 'BadComic';
-	}
+	
 </style>

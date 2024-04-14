@@ -22,3 +22,7 @@
 	font-family: 'BadComic';
 	src: local('BadComic'), local('BadComic'), url('../lib/fonts/BadComic.ttf');
 }
+
+h2,tr,td,div,th,div,p,span,button,input,a,h1 {
+	font-family: 'BadComic';
+}

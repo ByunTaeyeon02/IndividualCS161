@@ -717,10 +717,6 @@
 		max-width: 500px;
 	}
 
-	button,span,input,th,tr,td,p {
-		font-family: 'BadComic';
-	}
-
 	.gray {
 		background-color: gray;
 	}

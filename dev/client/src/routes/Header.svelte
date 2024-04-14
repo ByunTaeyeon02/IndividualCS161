@@ -48,7 +48,8 @@
 				body: JSON.stringify({ username: storedUsername, password: storedPassword, darkModeOn: darkModeOn })
 			});
 			const data = await response.json();
-			if (data.message === 'User registered successfully') {
+			let message = data.message;
+			if (message === 'User registered successfully') {
 				welcomMsg = "Welcome " + storedUsername;
 				successMsg = "Sign Up Successfull";
 				successAlert = true;
@@ -57,6 +58,9 @@
 				window.location.href = '/';
 			} else {
 				openModal = true;
+				successAlert = false;
+				warningAlert = true;
+				warningMsg = message;
 			}
 			console.log(data);
 		} catch (error) {
@@ -229,10 +233,6 @@
 	li {
 		margin-right: 15px;
         font-size: 1.5vh;
-	}
-
-	a,input,button,p,span {
-		font-family: 'BadComic';
 	}
 
 	.logo-container {
