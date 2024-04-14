@@ -9,6 +9,47 @@
 	let numOfHintsUsed: number;
 	let numOfGiveUpsUsed: number;
 
+	let allPuzzleCompleted: number;
+	let allNumOfHints: number;
+	let allNumOfHintsUsed: number;
+	let allNumOfGiveUpsUsed: number;
+
+	let topFive = [["p1", 100, 25, 0],
+					["p2", 80, 35, 10],
+					["p3", 75, 15, 0],
+					["p4", 20, 7, 5],
+					["p5", 10, 4, 4]];
+
+	async function fetchTotal() {
+        try {
+            const response = await fetch('/getTotals');
+            if (!response.ok) {
+                throw new Error('Failed to fetch totals');
+            }
+            const data = await response.json();
+            allPuzzleCompleted = data.total_puzzle_completed;
+            allNumOfHints = data.total_num_of_hints;
+            allNumOfHintsUsed = data.total_num_of_hints_used;
+            allNumOfGiveUpsUsed = data.total_num_of_give_ups_used;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+	async function updateTopFive() {
+        try {
+            const response = await fetch('/getTopScores');
+            if (!response.ok) {
+                throw new Error('Failed to fetch top scores');
+            }
+            const data = await response.json();
+            topFive = data;
+			console.log(topFive);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
 	async function isUserLoggedIn() {
 		try {
 			const response = await fetch('/protected');
@@ -41,7 +82,13 @@
 
 	onMount(() => {
         isUserLoggedIn();
+		updateTopFive();
+		fetchTotal();
 	});
+
+	function formatPercentage(number: number) {
+        return (number * 100).toFixed(2);
+    }
 </script>
 
 <svelte:head>
@@ -50,59 +97,84 @@
 
 <div class="text-column">
 	<div>
+		<div class="pt-2"></div>
+
 		<h2>Your Score</h2>
-		<table style="width: 80vw;">
-			<tr>
-				<td>
-					<div class="stat card shadow-xl rounded-3xl statDisplay">
-						<div class="stat-figure text-secondary">
-							<div class="radial-progress" style="--value:70;" role="progressbar">{puzzleCompleted / (numOfGiveUpsUsed + puzzleCompleted)}</div>
-						</div>
-						<div class="stat-title">Puzzles Completed</div>
-						<div class="stat-value">{puzzleCompleted}</div>
-						<div class="stat-desc">Puzzles completed without giving up</div>
-					</div>
-				</td>
-				<td>
-					<div class="stat card shadow-xl rounded-3xl statDisplay">
-						<div class="stat-figure text-secondary">
-							<div class="radial-progress" style="--value:70;" role="progressbar">{numOfHints / (numOfHints + numOfHintsUsed)}</div>
-						</div>
-						<div class="stat-title">Hints</div>
-						<div class="stat-value">{numOfHints}</div>
-						<div class="stat-desc"></div>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<div class="stat card shadow-xl rounded-3xl statDisplay">
-						<div class="stat-figure text-secondary">
-							<div class="radial-progress" style="--value:70;" role="progressbar">{puzzleCompleted / (numOfGiveUpsUsed + puzzleCompleted)}</div>
-						</div>
-						<div class="stat-title">Puzzles Completed</div>
-						<div class="stat-value">{puzzleCompleted}</div>
-						<div class="stat-desc">Puzzles completed without giving up</div>
-					</div>
-				</td>
-				<td>
-					<div class="stat card shadow-xl rounded-3xl statDisplay">
-						<div class="stat-figure text-secondary">
-							<div class="radial-progress" style="--value:70;" role="progressbar">{puzzleCompleted / (numOfGiveUpsUsed + puzzleCompleted)}</div>
-						</div>
-						<div class="stat-title">Puzzles Completed</div>
-						<div class="stat-value">{puzzleCompleted}</div>
-						<div class="stat-desc">Puzzles completed without giving up</div>
-					</div>
-				</td>
-			</tr>
-		</table>
+		<div class="stat card shadow-xl rounded-3xl statDisplay pt-8">
+			<div class="stat-figure text-secondary">
+				<div class="radial-progress" style="--value:{formatPercentage(numOfGiveUpsUsed / (numOfGiveUpsUsed + puzzleCompleted))};" role="progressbar">
+					{formatPercentage(numOfGiveUpsUsed / (numOfGiveUpsUsed + puzzleCompleted))}
+				</div>
+			</div>
+			<div class="stat-title">Puzzles Completed Without Giving Up</div>
+			<div class="stat-value">{puzzleCompleted}</div>
+			<div class="stat-desc">You gave up {formatPercentage(numOfGiveUpsUsed / (numOfGiveUpsUsed + puzzleCompleted))}% of the puzzles</div>
+		</div>
+		<div class="stat card shadow-xl rounded-3xl statDisplay pt-8">
+			<div class="stat-figure text-secondary">
+				<div class="radial-progress" style="--value:{formatPercentage(numOfHintsUsed / (numOfHints + numOfHintsUsed))};" role="progressbar">
+					{formatPercentage(numOfHintsUsed / (numOfHints + numOfHintsUsed))}
+				</div>
+			</div>
+			<div class="stat-title">Number of Hints Used</div>
+			<div class="stat-value">{numOfHintsUsed}</div>
+			<div class="stat-desc">You used {formatPercentage(numOfHintsUsed / (numOfHints + numOfHintsUsed))}% of your total hints</div>
+		</div>
+
+		<div class="pt-12"></div>
+
+		<h2>Others' Scores</h2>
+		<div class="stat card shadow-xl rounded-3xl statDisplay pt-8">
+			<div class="stat-figure text-secondary">
+				<div class="radial-progress" style="--value:{formatPercentage(allNumOfGiveUpsUsed / (allNumOfGiveUpsUsed + allPuzzleCompleted))};" role="progressbar">
+					{formatPercentage(allNumOfGiveUpsUsed / (allNumOfGiveUpsUsed + allPuzzleCompleted))}
+				</div>
+			</div>
+			<div class="stat-title">Puzzles Completed Without Giving Up</div>
+			<div class="stat-value">{allPuzzleCompleted}</div>
+			<div class="stat-desc">Others gave up {formatPercentage(allNumOfGiveUpsUsed / (allNumOfGiveUpsUsed + allPuzzleCompleted))}% of the puzzles</div>
+		</div>
+		<div class="stat card shadow-xl rounded-3xl statDisplay pt-8">
+			<div class="stat-figure text-secondary">
+				<div class="radial-progress" style="--value:{formatPercentage(allNumOfHintsUsed / (allNumOfHints + allNumOfHintsUsed))};" role="progressbar">
+					{formatPercentage(allNumOfHintsUsed / (allNumOfHints + allNumOfHintsUsed))}
+				</div>
+			</div>
+			<div class="stat-title">Number of Hints Used</div>
+			<div class="stat-value">{allNumOfHintsUsed}</div>
+			<div class="stat-desc">Others used {formatPercentage(allNumOfHintsUsed / (allNumOfHints + allNumOfHintsUsed))}% of their total hints</div>
+		</div>
+
+		<div class="pt-12"></div>
+
+		<div class="overflow-x-auto overflow-y-auto" style="max-height: 25vh;">
+			<table class="table table-pin-rows">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Username</th>
+						<th>Puzzles Completed</th>
+						<th>Hints Stored</th>
+						<th>Hints Used</th>
+					</tr>
+				</thead>
+				<tbody id="tableBody">
+					{#each topFive as row, rowIndex}
+						<tr class="hover">
+							<th>{rowIndex + 1}</th>
+							{#each row as value, colIndex}
+								<td>{value}</td>
+							{/each}
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>
 
-
 <style>
-	h2,tr,td,div {
+	h2,tr,td,div,th,div,p {
 		font-family: 'BadComic';
 	}
 </style>

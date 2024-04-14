@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user, UserMixin
 from flask_session import Session
+from sqlalchemy import func
 import random
 import os
 
@@ -138,6 +139,38 @@ def getRowString(curCol):
     for row in range(len(tileGridAnswer)):
         row_string += str(tileGridAnswer[row][curCol]) + " "
     return row_string.strip()
+
+@app.route('/getTotals')
+@login_required
+def get_totals():
+    totals = db.session.query(
+        func.sum(User.puzzleCompleted).label('total_puzzle_completed'),
+        func.sum(User.numOfHints).label('total_num_of_hints'),
+        func.sum(User.numOfHintsUsed).label('total_num_of_hints_used'),
+        func.sum(User.numOfGiveUpsUsed).label('total_num_of_give_ups_used')
+    ).first()
+    totals_dict = {
+        'total_puzzle_completed': totals[0],
+        'total_num_of_hints': totals[1],
+        'total_num_of_hints_used': totals[2],
+        'total_num_of_give_ups_used': totals[3]
+    }
+    return jsonify(totals_dict)
+
+@app.route('/getTopScores')
+@login_required
+def get_players_by_puzzle_completed():
+    users_sorted_by_puzzle_completed = User.query.order_by(User.puzzleCompleted.desc()).all()
+    players_array = []
+    for user in users_sorted_by_puzzle_completed:
+        player_data = [
+            user.username,
+            user.puzzleCompleted,
+            user.numOfHints,
+            user.numOfHintsUsed
+        ]
+        players_array.append(player_data)
+    return jsonify(players_array)
 
 @app.route('/favicon.ico')
 def favicon():
