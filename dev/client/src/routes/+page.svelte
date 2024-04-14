@@ -21,6 +21,7 @@
 	let hintOn = false;
 	let showSolutionAnswer = false;
 	let gaveUp = false;
+	let finished = false;
 
 	let showWrongAnswerMsg = false;
 	let showRightAnswerMsg = false;
@@ -81,7 +82,9 @@
 			getStringDisplay();
 			showRightAnswerMsg = false;
 			gaveUp = false;
+			finished = false;
 			checksLeft = 3;
+			showSolutionAnswer = false;
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
@@ -99,6 +102,8 @@
 				}
 			}
 			translateTileToDisplay(tileGrid);
+			console.log("showSolution tileGrid: " + tileGrid);
+			console.log("showSolution DisplayedGrid: " + DisplayedGrid);
 			if (isLoggedIn)
 				addGiveUps(1);
 			else
@@ -229,7 +234,7 @@
 	});
 
 	function toggleColor(row: number, col: number) {
-		if (!gaveUp) {
+		if (!gaveUp || !finished) {
 			const currentValue = DisplayedGrid[row][col];
 			if (hintOn) {
 				if (numOfHints > 0) {
@@ -334,7 +339,8 @@
 				numOfHints += 10;
 				puzzleCompleted += 1;
 			}
-			console.log(numOfHints);
+			finished = true;
+			//console.log(numOfHints);
 		} else {
 			showRightAnswerMsg = false;
 			showWrongAnswerMsg = true;
@@ -436,9 +442,11 @@
 	}
 
 	function toggleAnswers() {
+		/*
 		if (!gaveUp) {
 			showSolution();
 		}
+		*/
 		if (showSolutionAnswer) {
 			translateTileToDisplay(tileGrid);
 		} else {
@@ -534,6 +542,15 @@
 							</td>
 						</tr>
 						<tr>
+							<td></td>
+							<td colspan="5" style="text-align: center;">
+								<div>
+									<button class="btn btn-outline shadow-xl" style="width: 100%" on:click={generatePuzzle}>Generate New Puzzle</button>
+								</div>
+							</td>
+						</tr>
+					{:else if finished}
+						<tr class="pt-2">
 							<td></td>
 							<td colspan="5" style="text-align: center;">
 								<div>
