@@ -13,8 +13,8 @@ app.secret_key = 'your_secret_key_here'
 CORS(app)
 
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('postgres://u8hn24tacn72k6:peb83b93e9c43a9b2cae3db8ae79ce4f42788935b4bfcc62e8be78cfb1bd52de9@cb4l59cdg4fg1k.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/dfrbcaifs11kj7')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://u8hn24tacn72k6:peb83b93e9c43a9b2cae3db8ae79ce4f42788935b4bfcc62e8be78cfb1bd52de9@cb4l59cdg4fg1k.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/dfrbcaifs11kj7'
 app.config['SECRET_KEY'] = 'your_secret_key_here'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SESSION_TYPE'] = 'filesystem'
@@ -24,19 +24,7 @@ Session(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-"""
 class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
-    userType = db.Column(db.String(100), nullable=False)
-    darkModeOn = db.Column(db.Boolean, nullable=False)
-    puzzleCompleted = db.Column(db.Integer, nullable=False)
-    numOfHints = db.Column(db.Integer, nullable=False)
-    numOfHintsUsed = db.Column(db.Integer, nullable=False)
-    numOfGiveUpsUsed = db.Column(db.Integer, nullable=False)
-"""
-class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
