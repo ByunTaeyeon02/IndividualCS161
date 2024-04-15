@@ -22,6 +22,8 @@
 	let warningAlert = false;
 	let warningMsg = "";
 
+	let isLoggedIn = false;
+
 	async function isUserLoggedIn() {
 		try {
 			const response = await fetch('/protected');
@@ -29,8 +31,10 @@
 			console.log(data.loggedIn);
 			if (data.loggedIn) {
 				getUserInfoFull();
+				isLoggedIn = true;
 			} else {
-				window.location.href = '/';
+				//window.location.href = '/';
+				isLoggedIn = false;
 			}
 		} catch (error) {
 			console.error('Error fetching data:', error);
@@ -127,6 +131,15 @@
 	}
 
 	$: {
+		if (!isLoggedIn) {
+			console.log("logging in");
+			setTimeout(() => {
+				isUserLoggedIn();
+			}, 1000);
+		} else {
+			console.log("not Logged in");
+		}
+
 		if (successAlert) {
 			setTimeout(() => {
 				successAlert = false;

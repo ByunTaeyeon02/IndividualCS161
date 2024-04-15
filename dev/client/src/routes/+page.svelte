@@ -42,6 +42,15 @@
 
 	let isLoggedIn: boolean;
 
+	/*
+	function getCurrentURL() {
+		const currentURL = window.location.href;
+		console.log(currentURL);
+		if (currentURL.includes("/score")) {
+			window.location.href = '/score';
+		}
+	}*/
+
 	async function isUserLoggedIn() {
 		try {
 			const response = await fetch('/protected');
@@ -229,6 +238,7 @@
 	}
 	
 	onMount(() => {
+		//getCurrentURL();
 		isUserLoggedIn();
         generatePuzzle();
 	});

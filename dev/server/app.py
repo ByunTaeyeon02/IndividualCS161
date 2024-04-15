@@ -185,6 +185,16 @@ def base():
     static_directory = os.path.join(os.getcwd(), 'dev', 'client', 'build')
     return send_from_directory(static_directory, 'index.html')
 
+@app.route("/account")
+def account():
+    static_directory = os.path.join(os.getcwd(), 'dev', 'client', 'build')
+    return send_from_directory(static_directory, 'index.html')
+
+@app.route("/score")
+def score():
+    static_directory = os.path.join(os.getcwd(), 'dev', 'client', 'build')
+    return send_from_directory(static_directory, 'index.html')
+
 @app.route("/<path:path>")
 def home(path):
     static_directory = os.path.join(os.getcwd(), 'dev', 'client', 'build')

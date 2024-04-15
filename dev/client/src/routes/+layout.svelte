@@ -1,6 +1,20 @@
-<script>
+<script lang="ts">
 	import Header from './Header.svelte';
 	import './styles.css';
+
+	import { Router, Link, Route } from "svelte-routing";
+  	import Game from "./+page.svelte";
+  	import Account from "./account/+page.svelte";
+	import Score from "./score/+page.svelte";
+
+	const routes = [
+		{ path: "/", component: Game },
+		{ path: "/account", component: Account },
+		{ path: "/score", component: Score },
+	];
+
+	export let url = "";
+  	let currentUrl = window.location.pathname;
 </script>
 
 <div class="app">
@@ -48,6 +62,4 @@
 			padding: 12px 0;
 		}
 	}
-
-	
 </style>

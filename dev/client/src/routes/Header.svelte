@@ -292,10 +292,10 @@
 							<a onclick="my_modal_1.showModal()">Log-in</a>
 						</li>
 					{:else}
-						<li aria-current={$page.url.pathname === '/about' ? 'page' : undefined}>
+						<li aria-current={$page.url.pathname === '/score' ? 'page' : undefined}>
 							<a href="/score">Score</a>
 						</li>
-						<li aria-current={$page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}>
+						<li aria-current={$page.url.pathname === '/account' ? 'page' : undefined}>
 							<a href="/account">Account</a>
 						</li>
 						<li>
