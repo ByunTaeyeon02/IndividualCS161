@@ -26,7 +26,7 @@
 		try {
 			const response = await fetch('/protected');
 			const data = await response.json();
-			console.log(data.loggedIn);
+			//console.log(data.loggedIn);
 			if (data.loggedIn) {
 				userType = 1;
 				getIsDarkMode();
@@ -113,7 +113,7 @@
 			const response = await fetch('/getDarkMode');
 			const data = await response.json();
 			darkModeOn = data.darkModeOn;
-			console.log("darkModeOn: " + darkModeOn);
+			//console.log("darkModeOn: " + darkModeOn);
 			let themeToggle = document.getElementById('themeToggle');
 			themeToggle.checked = darkModeOn;
 		} catch (error) {
@@ -131,7 +131,7 @@
 				body: JSON.stringify({ darkModeOn: darkModeOn })
 			});
 			const data = await response.json();
-			console.log(data);
+			//console.log(data);
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
@@ -187,7 +187,7 @@
 	}
 
 	function toggleDarkMode() {
-		console.log("darkMode Toggled: " + darkModeOn);
+		//console.log("darkMode Toggled: " + darkModeOn);
 		if (darkModeOn) {
 			darkModeOn = false;
 		} else {

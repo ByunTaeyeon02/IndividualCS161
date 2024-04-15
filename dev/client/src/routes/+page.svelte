@@ -42,14 +42,16 @@
 
 	let isLoggedIn: boolean;
 
-	/*
+	
 	function getCurrentURL() {
-		const currentURL = window.location.href;
-		console.log(currentURL);
-		if (currentURL.includes("/score")) {
-			window.location.href = '/score';
+		const currentURL = window.location.pathname;
+		//console.log(currentURL);
+		if (currentURL == "/score") {
+			window.location.href = '/';
+		} else if (currentURL == "/account") {
+			window.location.href = '/';
 		}
-	}*/
+	}
 
 	async function isUserLoggedIn() {
 		try {
@@ -238,7 +240,7 @@
 	}
 	
 	onMount(() => {
-		//getCurrentURL();
+		getCurrentURL();
 		isUserLoggedIn();
         generatePuzzle();
 	});

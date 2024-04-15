@@ -185,20 +185,15 @@ def base():
     static_directory = os.path.join(os.getcwd(), 'dev', 'client', 'build')
     return send_from_directory(static_directory, 'index.html')
 
-@app.route("/account")
-def account():
-    static_directory = os.path.join(os.getcwd(), 'dev', 'client', 'build')
-    return send_from_directory(static_directory, 'index.html')
-
-@app.route("/score")
-def score():
-    static_directory = os.path.join(os.getcwd(), 'dev', 'client', 'build')
-    return send_from_directory(static_directory, 'index.html')
-
 @app.route("/<path:path>")
-def home(path):
-    static_directory = os.path.join(os.getcwd(), 'dev', 'client', 'build')
-    return send_from_directory(static_directory, path)
+def assets(path):
+    try:
+        static_directory = os.path.join(os.getcwd(), 'dev', 'client', 'build')
+        response = send_from_directory(static_directory, path)
+        return response
+    except:
+        static_directory = os.path.join(os.getcwd(), 'dev', 'client', 'build')
+        return send_from_directory(static_directory, 'index.html')
 
 @app.route('/protected')
 def protected():

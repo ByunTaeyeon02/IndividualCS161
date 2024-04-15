@@ -185,8 +185,12 @@ def base():
     return send_from_directory('../client/build', 'index.html')
 
 @app.route("/<path:path>")
-def home(path):
-    return send_from_directory('../client/build', path)
+def assets(path):
+    try:
+        response = send_from_directory('../client/build', path)
+        return response
+    except:
+        return send_from_directory('../client/build', 'index.html')
 
 @app.route('/protected')
 def protected():

@@ -106,7 +106,7 @@
 					{formatPercentage(numOfGiveUpsUsed / (numOfGiveUpsUsed + puzzleCompleted))}
 				</div>
 			</div>
-			<div class="stat-title">Puzzles Completed Without Giving Up</div>
+			<div class="stat-title">Puzzles Completed</div>
 			<div class="stat-value">{puzzleCompleted}</div>
 			<div class="stat-desc">You gave up {formatPercentage(numOfGiveUpsUsed / (numOfGiveUpsUsed + puzzleCompleted))}% of the puzzles</div>
 		</div>
@@ -130,7 +130,7 @@
 					{formatPercentage(allNumOfGiveUpsUsed / (allNumOfGiveUpsUsed + allPuzzleCompleted))}
 				</div>
 			</div>
-			<div class="stat-title">Puzzles Completed Without Giving Up</div>
+			<div class="stat-title">Puzzles Completed</div>
 			<div class="stat-value">{allPuzzleCompleted}</div>
 			<div class="stat-desc">Others gave up {formatPercentage(allNumOfGiveUpsUsed / (allNumOfGiveUpsUsed + allPuzzleCompleted))}% of the puzzles</div>
 		</div>
