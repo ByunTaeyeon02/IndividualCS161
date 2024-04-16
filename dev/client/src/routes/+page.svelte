@@ -42,6 +42,11 @@
 
 	let isLoggedIn: boolean;
 
+	let colResult = [true, true, true, true, true, true];
+	let rowResult = [true, true, true, true, true, true];
+
+	let showGrayToWhiteMsg = false;
+
 	
 	function getCurrentURL() {
 		const currentURL = window.location.pathname;
@@ -96,6 +101,8 @@
 			finished = false;
 			checksLeft = 3;
 			showSolutionAnswer = false;
+			colResult = [true, true, true, true, true, true];
+			rowResult = [true, true, true, true, true, true];
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
@@ -125,6 +132,8 @@
 			else
 				numOfGiveUpsUsed += 1;
 			gaveUp = true;
+			colResult = [true, true, true, true, true, true];
+			rowResult = [true, true, true, true, true, true];
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
@@ -186,6 +195,8 @@
 			tileGrid = data.tileGrid;
 			translateTileToDisplay(tileGrid);
 			showResetMsg = false;
+			colResult = [true, true, true, true, true, true];
+			rowResult = [true, true, true, true, true, true];
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
@@ -277,44 +288,7 @@
 			}
 		}
 	}
-	/*
-	async function checkAnswer() {
-		try {
-			const response = await fetch('/showSolution');
-			const data = await response.json();
-			tileGrid = data.tileGridAnswer;
-			let numWrong = 0;
-			for (let row = 0; row < 5; row++) {
-				for (let col = 0; col < 5; col++) {
-					if (tileGrid[row][col] != DisplayedGrid[row + 1][col + 1])
-						numWrong++;
-				}
-			}
-			if (numWrong == 0) {
-				showRightAnswerMsg = true;
-				showWrongAnswerMsg = false;
-				rightAnswerMsg = "Congrats (+10 Hints)! New Puzzle?";
-				if (isLoggedIn) {
-					addHints(10);
-					addPuzzleCompleted(1);
-				} else {
-					numOfHints += 10;
-					puzzleCompleted += 1;
-				}
-				console.log(numOfHints);
-			} else {
-				showRightAnswerMsg = false;
-				showWrongAnswerMsg = true;
-				checksLeft -= 1;
-				wrongAnswerMsg = "Number of Incorrect Tile(s): " + numWrong + " (" + checksLeft + " checks left)";
-				if (checksLeft == 0) {
-					showSolution();
-				}
-			}
-		} catch (error) {
-			console.error('Error fetching data:', error);
-		}
-	} */
+	
 
 	function checkUserAnswer() {
 		let uncomplete = false;
@@ -325,25 +299,45 @@
 			}
 		}
 		if (uncomplete) {
-			showWarningMsg = true;
-			warningMsg = "All tiles must be black or white";
+			//showWarningMsg = true;
+			//warningMsg = "All tiles must be black or white";
+			showGrayToWhiteMsg = true;
 		} else {
-			checkAnswer2();
+			checkAnswer();
 		}
 	}
 
-	function checkAnswer2() {
+	function grayToWhite() {
+		for (let row = 0; row < 5; row++) {
+			for (let col = 0; col < 5; col++) {
+				if (DisplayedGrid[row + 1][col + 1] == 0)
+					DisplayedGrid[row + 1][col + 1] = 2;
+			}
+		}
+		showGrayToWhiteMsg = false;
+		checkAnswer();
+	}
+
+	function checkAnswer() {
 		let correct = true;
 
+		colResult = [true, true, true, true, true, true];
+		rowResult = [true, true, true, true, true, true];
+
 		for (let i = 1; i <= 5; i++) {
-			correct = correct && checkCol(i);
+			colResult[i] = checkCol(i)
+			correct = correct && colResult[i];
 			//console.log(checkCol(i));
 		}
 
 		for (let i = 1; i <= 5; i++) {
-			correct = correct && checkRow(i);
+			rowResult[i] = checkRow(i);
+			correct = correct && rowResult[i];
 			//console.log(checkRow(i));
 		}
+
+		//console.log(colResult);
+		//console.log(rowResult);
 
 		if (correct) {
 			showRightAnswerMsg = true;
@@ -451,6 +445,7 @@
 	function denyAlert() {
 		showRightAnswerMsg = false;
 		showResetMsg = false;
+		showGrayToWhiteMsg = false;
 	}
 
 	function confirmReset() {
@@ -501,6 +496,15 @@
 					<button class="btn btn-sm btn-outline shadow-xl" on:click={generatePuzzle}>Accept</button>
 				</div>
 			</div>
+		{:else if showGrayToWhiteMsg}
+			<div role="alert" class="alert shadow-xl">
+				<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+				<span>Change all gray tiles to white?</span>
+				<div>
+					<button class="btn btn-sm btn-ghost" on:click={denyAlert}>Deny</button>
+					<button class="btn btn-sm btn-outline shadow-xl" on:click={grayToWhite}>Accept</button>
+				</div>
+			</div>
 		{:else if showWrongAnswerMsg}
 			<div role="alert" class="alert alert-error shadow-xl">
 				<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -530,15 +534,29 @@
 						<tr>
 							{#each row as value, colIndex}
 								{#if rowIndex === 0}	
-									<td style="vertical-align: bottom; text-align: center;">
-										<span class="top displayTableString">{value}</span>
-									</td>
+									{#if colResult[colIndex] == true}
+										<td style="vertical-align: bottom; text-align: center;">
+											<span class="top displayTableString">{value}</span>
+										</td>
+									{:else}
+										<td style="vertical-align: bottom; text-align: center;">
+											<span class="top displayTableString" style="color: red;">{value}</span>
+										</td>
+									{/if}
 								{:else}
 									<td style="text-align: right;">
 										{#if typeof value === 'number'}
 											<button class="btn tile shadow-xl" class:gray={value === 0} class:black={value === 1} class:white={value === 2} on:click={() => toggleColor(rowIndex, colIndex)}></button>
 										{:else}
-											<span class="side displayTableString pr-5">{value}</span>
+											{#if rowResult[rowIndex] == true}
+												<td style="vertical-align: bottom; text-align: center;">
+													<span class="side displayTableString pr-5">{value}</span>
+												</td>
+											{:else}
+												<td style="vertical-align: bottom; text-align: center;">
+													<span class="side displayTableString pr-5" style="color: red;">{value}</span>
+												</td>
+											{/if}
 										{/if}
 									</td>
 								{/if}
