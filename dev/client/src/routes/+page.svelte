@@ -105,6 +105,11 @@
 		try {
 			const response = await fetch('/showSolution');
 			const data = await response.json();
+
+			//console.log("tileGrid: " + tileGrid);
+			//console.log("tileGridAnswer: " + data.tileGridAnswer);
+			//console.log("DisplayedGrid: " + DisplayedGrid);
+
 			tileGrid = data.tileGridAnswer;
 			for (let row = 1; row < 6; row++) {
 				for (let col = 1; col < 6; col++) {
@@ -113,8 +118,8 @@
 				}
 			}
 			translateTileToDisplay(tileGrid);
-			console.log("showSolution tileGrid: " + tileGrid);
-			console.log("showSolution DisplayedGrid: " + DisplayedGrid);
+			//console.log("showSolution tileGrid: " + tileGrid);
+			//console.log("showSolution DisplayedGrid: " + DisplayedGrid);
 			if (isLoggedIn)
 				addGiveUps(1);
 			else
@@ -272,7 +277,7 @@
 			}
 		}
 	}
-
+	/*
 	async function checkAnswer() {
 		try {
 			const response = await fetch('/showSolution');
@@ -309,7 +314,7 @@
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
-	}
+	} */
 
 	function checkUserAnswer() {
 		let uncomplete = false;
