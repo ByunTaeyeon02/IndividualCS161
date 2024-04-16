@@ -14,11 +14,11 @@
 	let allNumOfHintsUsed: number;
 	let allNumOfGiveUpsUsed: number;
 
-	let topFive = [["p1", 100, 25, 0],
-					["p2", 80, 35, 10],
-					["p3", 75, 15, 0],
-					["p4", 20, 7, 5],
-					["p5", 10, 4, 4]];
+	let topFive = [["p1", 100, 25, 0, 1],
+					["p2", 80, 35, 10, 1],
+					["p3", 75, 15, 0, 1],
+					["p4", 20, 7, 5, 1],
+					["p5", 10, 4, 4, 1]];
 
 	async function fetchTotal() {
         try {
@@ -156,6 +156,7 @@
 						<th>Puzzles Completed</th>
 						<th>Hints Stored</th>
 						<th>Hints Used</th>
+						<th>Give Ups</th>
 					</tr>
 				</thead>
 				<tbody id="tableBody">

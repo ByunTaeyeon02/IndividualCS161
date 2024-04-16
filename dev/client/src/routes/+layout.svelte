@@ -2,6 +2,7 @@
 	import Header from './Header.svelte';
 	import './styles.css';
 
+	/*
 	import { Router, Link, Route } from "svelte-routing";
   	import Game from "./+page.svelte";
   	import Account from "./account/+page.svelte";
@@ -14,7 +15,7 @@
 	];
 
 	export let url = "";
-  	let currentUrl = window.location.pathname;
+  	let currentUrl = window.location.pathname; */
 </script>
 
 <div class="app">

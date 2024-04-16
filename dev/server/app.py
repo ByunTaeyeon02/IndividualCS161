@@ -162,14 +162,16 @@ def get_totals():
 @app.route('/getTopScores')
 @login_required
 def get_players_by_puzzle_completed():
-    users_sorted_by_puzzle_completed = User.query.order_by(User.puzzleCompleted.desc()).all()
+    #users_sorted_by_puzzle_completed = User.query.order_by(User.puzzleCompleted.desc()).all()
+    users_sorted_by_puzzle_completed = User.query.order_by(User.puzzleCompleted.desc()).limit(20).all()
     players_array = []
     for user in users_sorted_by_puzzle_completed:
         player_data = [
             user.username,
             user.puzzleCompleted,
             user.numOfHints,
-            user.numOfHintsUsed
+            user.numOfHintsUsed,
+            user.numOfGiveUpsUsed
         ]
         players_array.append(player_data)
     return jsonify(players_array)
@@ -382,7 +384,7 @@ def setUsername():
 
         current_user.username = username
         db.session.commit()
-        return jsonify({'username': current_user.username})
+        return jsonify({'message': 'User registered successfully'})
     else:
         return jsonify({'message': 'User not authenticated'}), 401
     

@@ -12,6 +12,7 @@
 	let numOfGiveUpsUsed: number;
 
 	// inputs
+	let displayedUsername: string;
 	let newPassword1: string;
 	let newPassword2: string;
 	let newUsername: string;
@@ -24,6 +25,8 @@
 
 	let isLoggedIn = false;
 
+	let maxChar = 20;
+
 	async function isUserLoggedIn() {
 		try {
 			const response = await fetch('/protected');
@@ -32,9 +35,6 @@
 			if (data.loggedIn) {
 				getUserInfoFull();
 				isLoggedIn = true;
-			} else {
-				//window.location.href = '/';
-				isLoggedIn = false;
 			}
 		} catch (error) {
 			console.error('Error fetching data:', error);
@@ -51,14 +51,15 @@
 			numOfHints = data.numOfHints;
 			numOfHintsUsed = data.numOfHintsUsed;
 			numOfGiveUpsUsed = data.numOfGiveUpsUsed;
+			displayedUsername = username;
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
 	}
 
 	onMount(() => {
-        isUserLoggedIn();
-		newPassword1 = "";
+		displayedUsername = "";
+        newPassword1 = "";
 		newPassword2 = "";
 		newUsername = "";
 	});
@@ -84,7 +85,7 @@
 			let message = data.message;
 
 			if (message === "User registered successfully") {
-				username = newUsername;
+				displayedUsername = newUsername;
 				newUsername = "";
 				successAlert = true;
 				warningAlert = false;
@@ -132,12 +133,7 @@
 
 	$: {
 		if (!isLoggedIn) {
-			console.log("logging in");
-			setTimeout(() => {
-				isUserLoggedIn();
-			}, 1000);
-		} else {
-			console.log("not Logged in");
+			isUserLoggedIn();
 		}
 
 		if (successAlert) {
@@ -149,6 +145,28 @@
 			setTimeout(() => {
 				warningAlert = false;
 			}, 2500);
+		}
+
+		setTimeout(() => {
+			console.log("displayedUsername:", displayedUsername);
+		}, 2500);
+
+		if (typeof newUsername === 'string') {
+			if (newUsername.length > maxChar) {
+				newUsername = newUsername.substring(0, maxChar).trim();
+			}
+		}
+
+		if (typeof newPassword1 === 'string') {
+			if (newPassword1.length > maxChar) {
+				newPassword1 = newPassword1.substring(0, maxChar).trim();
+			}
+		}
+
+		if (typeof newPassword2 === 'string') {
+			if (newPassword2.length > maxChar) {
+				newPassword2 = newPassword2.substring(0, maxChar).trim();
+			}
 		}
   	} 
 </script>
@@ -182,11 +200,10 @@
 					</tr>
 					<tr class="hover"> 
 						<th>Username</th>
-						<td>{username}</td>
-						<td>
+						<td colspan="2">
 							<label class="input input-bordered flex items-center gap-2">
 								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" /></svg>
-								<input type="text" class="grow" placeholder="New username" bind:value={newUsername}/>
+								<input type="text" class="grow" placeholder={displayedUsername} bind:value={newUsername}/>
 							 </label>
 						</td>
 						<td>

@@ -641,13 +641,15 @@
 						<td><div class="pb-2"></div></td>
 					</tr>
 					<tr>
-						<td colspan="2" class="font-bold">Game:</td>
+						<td colspan="3" class="font-bold">Game:</td>
 					</tr>
 					<tr>
-						<td><p>+ You are trying to color the tiles based on the rules in the rows/columns</p></td>
+						<td colspan="3"><p>You are trying to color the tiles based on the rules in the rows/columns</p></td>
 					</tr>
 					<tr>
-						<td><p>+ Ex: if the row rule states "4" then that means that for that row there will be 4 black tiles with no space in between</p></td>
+						<td><p>Ex: if the row rule states "4" then that means that for that row there will be 4 black tiles with no space in between</p></td>
+						<td class="pr-6"></td>
+						<td class="pt-4"><p>Ex: if the row rule states "1 2" then that means that for that row there will be 1 black tile followed by atleast 1 white tile and then another 2 black tiles</p></td>
 					</tr>
 					<tr>
 						<td>
@@ -670,11 +672,7 @@
 								</tr>
 							</table>
 						</td>
-					</tr>
-					<tr>
-						<td><p>+ Ex: if the row rule states "1 2" then that means that for that row there will be 1 black tiles follow by atleast 1 white square and then another 2 black tiles</p></td>
-					</tr>
-					<tr>
+						<td></td>
 						<td>
 							<table style="border-collapse: collapse;">
 								<tr style="text-align: right;">
@@ -708,22 +706,164 @@
 						<td><div class="pb-4"></div></td>
 					</tr>
 					<tr>
-						<td colspan="2" class="font-bold">Interactables:</td>
+						<td colspan="3"><p>Below is an example of two completed 5 x 5 puzzles, with the same rules but different answers</p></td>
 					</tr>
 					<tr>
-						<td><p>+ Tiles: Click on tiles to flip and change color</p></td>
+						<td class="pt-4">
+							<p>The left is wrong because column 5 has 5 black tiles and not 4, and row 5 has 2 black tiles instead of having 1 like in the row 5's rule</p>
+						</td>
+						<td></td>
+						<td>
+							<p>The right is correct because all the columns and rows matches with the assigned rules</p>
+						</td>
 					</tr>
 					<tr>
-						<td><p>+ Give up: Click show solution</p></td>
+						<td>
+							<table style="border-collapse: collapse;">
+								<tr style="text-align: right;">
+									<td></td>
+									<td style="vertical-align: bottom; text-align: center;">
+										<span class="top displayTableString">4</span>
+									</td>
+									<td style="vertical-align: bottom; text-align: center;">
+										<span class="top displayTableString">1<br>2</span>
+									</td>
+									<td style="vertical-align: bottom; text-align: center;">
+										<span class="top displayTableString">2<br>1</span>
+									</td>
+									<td style="vertical-align: bottom; text-align: center;">
+										<span class="top displayTableString">3</span>
+									</td>
+									<td style="vertical-align: bottom; text-align: center;">
+										<span class="top displayTableString" style="color: red;">4</span>
+									</td>
+								</tr>
+								<tr style="text-align: right;">
+									<td><span class="side displayTableString pr-5">4</span></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+								</tr>
+								<tr style="text-align: right;">
+									<td><span class="side displayTableString pr-5">1 3</span></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+								</tr>
+								<tr style="text-align: right;">
+									<td><span class="side displayTableString pr-5">2 2</span></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+								</tr>
+								<tr style="text-align: right;">
+									<td><span class="side displayTableString pr-5">3 1</span></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+								</tr>
+								<tr style="text-align: right;">
+									<td><span class="side displayTableString pr-5" style="color: red;">1</span></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+								</tr>
+							</table>
+						</td>
+						<td></td>
+						<td>
+							<table style="border-collapse: collapse;">
+								<tr style="text-align: right;">
+									<td></td>
+									<td style="vertical-align: bottom; text-align: center;">
+										<span class="top displayTableString">4</span>
+									</td>
+									<td style="vertical-align: bottom; text-align: center;">
+										<span class="top displayTableString">1<br>2</span>
+									</td>
+									<td style="vertical-align: bottom; text-align: center;">
+										<span class="top displayTableString">2<br>1</span>
+									</td>
+									<td style="vertical-align: bottom; text-align: center;">
+										<span class="top displayTableString">3</span>
+									</td>
+									<td style="vertical-align: bottom; text-align: center;">
+										<span class="top displayTableString">4</span>
+									</td>
+								</tr>
+								<tr style="text-align: right;">
+									<td><span class="side displayTableString pr-5">4</span></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+								</tr>
+								<tr style="text-align: right;">
+									<td><span class="side displayTableString pr-5">1 3</span></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+								</tr>
+								<tr style="text-align: right;">
+									<td><span class="side displayTableString pr-5">2 2</span></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+								</tr>
+								<tr style="text-align: right;">
+									<td><span class="side displayTableString pr-5">3 1</span></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+								</tr>
+								<tr style="text-align: right;">
+									<td><span class="side displayTableString pr-5">1</span></td>
+									<td><button class="btn tile shadow-xl black"></button></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+									<td><button class="btn tile shadow-xl white"></button></td>
+								</tr>
+							</table>
+						</td>
 					</tr>
 					<tr>
-						<td><p>+ Reset: Click to reset all tiles to gray</p></td>
+						<td><div class="pb-4"></div></td>
 					</tr>
 					<tr>
-						<td><p>+ Hint: Select a tile after pressing hint button to see solution for that tile</p></td>
+						<td colspan="3" class="font-bold">Interactables:</td>
 					</tr>
 					<tr>
-						<td><p>+ Check: Click to check answer</p></td>
+						<td colspan="3"><p>+ Tiles: Click on tiles to flip and change color</p></td>
+					</tr>
+					<tr>
+						<td colspan="3"><p>+ Give up: Click show solution</p></td>
+					</tr>
+					<tr>
+						<td colspan="3"><p>+ Reset: Click to reset all tiles to gray</p></td>
+					</tr>
+					<tr>
+						<td colspan="3"><p>+ Hint: Select a tile after pressing hint button to see solution for that tile</p></td>
+					</tr>
+					<tr>
+						<td colspan="3"><p>+ Check: Click to check answer</p></td>
 					</tr>
 				</table>
 			</div>

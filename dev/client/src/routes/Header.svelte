@@ -21,6 +21,7 @@
 	let warningMsg = "";
 
 	let openModal = true;
+	let maxChar = 20;
 
 	async function isUserLoggedIn() {
 		try {
@@ -213,6 +214,24 @@
 			setTimeout(() => {
 				warningAlert = false;
 			}, 2500);
+		}
+
+		if (typeof userName === 'string') {
+			if (userName.length > maxChar) {
+				userName = userName.substring(0, maxChar).trim();
+			}
+		}
+
+		if (typeof password === 'string') {
+			if (password.length > maxChar) {
+				password = password.substring(0, maxChar).trim();
+			}
+		}
+
+		if (typeof password2 === 'string') {
+			if (password2.length > maxChar) {
+				password2 = password2.substring(0, maxChar).trim();
+			}
 		}
 
 		if (!openModal) {
