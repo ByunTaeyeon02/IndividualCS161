@@ -136,7 +136,8 @@
 				throw new Error('Failed to upload user info');
 			}
 			const responseData = await response.json();
-			console.log(responseData.message); // Log the response message
+			//console.log(responseData.message); // Log the response message
+			//updateTopFive();
 		} catch (error) {
         	console.error('Error:', error);
     	}
@@ -176,7 +177,7 @@
 							<div class="label">
 								<span class="label-text">Download Data</span>
 							</div>
-							<td style="text-align: center;"><button class="btn btn-outline shadow-xl" style="width: 100%" on:click={saveInfo}>All Users' Info</button></td>
+							<button class="btn btn-outline shadow-xl" style="width: 100%" on:click={saveInfo}>All Users' Info</button>
 						</label>
 					</div>
 					<div class="stat">
@@ -192,7 +193,7 @@
 							<div class="label">
 								<span class="label-text">Clear Data</span>
 							</div>
-							<td style="text-align: center;"><button class="btn btn-outline shadow-xl" style="width: 100%" on:click={clearData}>Clear Data</button></td>
+							<button class="btn btn-outline shadow-xl" style="width: 100%" on:click={clearData}>Clear Data</button>
 						</label>
 					</div>
 				</div>
