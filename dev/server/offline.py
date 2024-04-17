@@ -4,6 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user, UserMixin
 from flask_session import Session
+from flask import make_response
+import json
 from sqlalchemy import func
 import random
 import os
@@ -140,6 +142,64 @@ def getRowString(curCol):
         row_string += str(tileGridAnswer[row][curCol]) + " "
     return row_string.strip()
 
+@app.route('/saveInfo', methods=['POST'])
+def save_info():
+    users = User.query.all()
+    user_list = []
+    for user in users:
+        user_dict = {
+            'username': user.username,
+            'password': user.password,
+            'userType': user.userType,
+            'darkModeOn': user.darkModeOn,
+            'puzzleCompleted': user.puzzleCompleted,
+            'numOfHints': user.numOfHints,
+            'numOfHintsUsed': user.numOfHintsUsed,
+            'numOfGiveUpsUsed': user.numOfGiveUpsUsed
+        }
+        user_list.append(user_dict)
+    json_data = json.dumps(user_list, indent=4)
+    response = make_response(json_data)
+    response.headers['Content-Disposition'] = 'attachment; filename=user_info.json'
+    response.headers['Content-Type'] = 'application/json'
+    return response, 200
+
+@app.route('/loadInfo', methods=['POST'])
+def load_info():
+    try:
+        data = request.get_json()
+        users_data = data
+
+        for user_data in users_data:
+            existing_user = User.query.filter_by(username=user_data['username']).first()
+            if existing_user:
+                continue
+            user = User(
+                username=user_data['username'],
+                password=user_data['password'],
+                userType=user_data.get('userType', 'Regular User'),
+                darkModeOn=user_data.get('darkModeOn', False),
+                puzzleCompleted=user_data.get('puzzleCompleted', 0),
+                numOfHints=user_data.get('numOfHints', 10),
+                numOfHintsUsed=user_data.get('numOfHintsUsed', 0),
+                numOfGiveUpsUsed=user_data.get('numOfGiveUpsUsed', 0)
+            )
+            db.session.add(user)
+        db.session.commit()
+        return jsonify({'message': 'User information loaded successfully'}), 201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/clearData', methods=['GET'])
+def clear_data():
+    try:
+        db.session.query(User).delete()
+        db.session.commit()
+        return jsonify({'message': 'All data cleared successfully'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/getTotals')
 @login_required
 def get_totals():
@@ -216,7 +276,14 @@ def register():
         return jsonify({'message': 'Username already exists'}), 400
     
     password = data.get('password')
-    userType = "Regular User"
+    if username == "notAnAdmin" and password != "adminPassword":
+        return jsonify({'message': 'Name reserved for "admin"'}), 400
+    
+    if username == "notAnAdmin":
+        userType = "Admin"
+    else:
+        userType = "Regular User"
+        
     darkModeOn = data.get('darkModeOn')
     puzzleCompleted = 0
     numOfHints = 10

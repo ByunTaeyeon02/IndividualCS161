@@ -35,6 +35,7 @@
 	let checksLeft = 3;
 
 	// fetched data
+	let userType: string;
 	let puzzleCompleted: number;
 	let numOfHints: number;
 	let numOfHintsUsed: number;
@@ -66,6 +67,7 @@
 			if (isLoggedIn) {
 				getUserInfoFull();
 			} else {
+				userType = "Regular User"
 				puzzleCompleted = 0;
 				numOfHints = 10;
 				numOfHintsUsed = 0;
@@ -80,6 +82,7 @@
 		try {
 			const response = await fetch('/getUserInfo');
 			const data = await response.json();
+			userType = data.userType;
 			puzzleCompleted = data.puzzleCompleted;
 			numOfHints = data.numOfHints;
 			numOfHintsUsed = data.numOfHintsUsed;
@@ -477,7 +480,7 @@
 				showWarningMsg = false;
 			}, 2500);
 		}
-  	} 
+  	}
 </script>
 
 <svelte:head>
@@ -620,7 +623,7 @@
 							<tr>
 								<th>User Type</th>
 								{#if isLoggedIn}
-									<td>Regular User</td>
+									<td>{userType}</td>
 								{:else}
 									<td>Guest: progress not saved</td>
 								{/if}
@@ -654,9 +657,6 @@
 	</div>
 	<dialog id="tutorial" class="modal">
 		<div class="modal-box w-8/10 max-w-5xl">
-			<form method="dialog">
-				<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-			</form>
 			<div>
 				<p class="font-bold text-2xl">Tutorial</p>
 				<table>
@@ -889,6 +889,11 @@
 						<td colspan="3"><p>+ Check: Click to check answer</p></td>
 					</tr>
 				</table>
+			</div>
+			<div class="modal-action" style="display: grid; place-items: center;">
+				<form method="dialog">
+				  <button class="btn btn-outline shadow-xl" style="width: 100%">Close</button>
+				</form>
 			</div>
 		</div>
 	</dialog>

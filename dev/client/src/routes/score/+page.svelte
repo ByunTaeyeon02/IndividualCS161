@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	
 	// fetched data
-	let username: string;
+	let username: string = "";
 	let userType: string;
 	let puzzleCompleted: number;
 	let numOfHints: number;
@@ -87,8 +87,76 @@
 	});
 
 	function formatPercentage(number: number) {
+		if (isNaN(number)) {
+			return (0).toFixed(2);
+		}
         return (number * 100).toFixed(2);
     }
+
+	async function saveInfo() {
+		try {
+			const response = await fetch('/saveInfo', {
+				method: 'POST',
+				headers: {
+				'Content-Type': 'application/json'
+				},
+				// Optionally, you can send any data needed for the function here
+				body: JSON.stringify({ /* data if needed */ })
+			});
+			if (!response.ok) {
+				throw new Error('Failed to save information');
+			}
+			const filename = response.headers.get('Content-Disposition').split('filename=')[1];
+			const blob = await response.blob();
+			const url = window.URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = filename;
+			a.click();
+			window.URL.revokeObjectURL(url);
+		} catch (error) {
+			console.error('Error:', error);
+		}
+	}
+
+	async function uploadUserInfo(event) {
+		try {
+			const file = event.target.files[0];
+			const fileContent = await file.text();
+			const jsonData = JSON.parse(fileContent);
+			console.log(jsonData);
+			const response = await fetch('/loadInfo', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(jsonData)
+			});
+			if (!response.ok) {
+				throw new Error('Failed to upload user info');
+			}
+			const responseData = await response.json();
+			console.log(responseData.message); // Log the response message
+		} catch (error) {
+        	console.error('Error:', error);
+    	}
+	}
+
+	async function clearData() {
+		try {
+			const response = await fetch('/clearData', {
+				method: 'GET'
+			});
+			if (!response.ok) {
+				throw new Error('Failed to clear data');
+			}
+			const responseData = await response.json();
+			//console.log(responseData.message);
+			window.location.href = '/';
+		} catch (error) {
+			console.error('Error:', error);
+		}
+	}
 </script>
 
 <svelte:head>
@@ -98,6 +166,39 @@
 <div class="text-column">
 	<div>
 		<div class="pt-2"></div>
+
+		{#if username == "notAnAdmin"}
+			<h2>Admin Only</h2>
+			<div class="stat card shadow-xl rounded-3xl statDisplay pt-8">
+				<div class="stats">
+					<div class="stat">
+						<label class="form-control w-full">
+							<div class="label">
+								<span class="label-text">Download Data</span>
+							</div>
+							<td style="text-align: center;"><button class="btn btn-outline shadow-xl" style="width: 100%" on:click={saveInfo}>All Users' Info</button></td>
+						</label>
+					</div>
+					<div class="stat">
+						<label class="form-control w-full">
+							<div class="label">
+								<span class="label-text">Upload Data (JSON)</span>
+							</div>
+							<input type="file" class="file-input file-input-bordered w-full" accept=".json" on:change={uploadUserInfo}>
+						</label>
+					</div>
+					<div class="stat">
+						<label class="form-control w-full">
+							<div class="label">
+								<span class="label-text">Clear Data</span>
+							</div>
+							<td style="text-align: center;"><button class="btn btn-outline shadow-xl" style="width: 100%" on:click={clearData}>Clear Data</button></td>
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="pt-12"></div>
+		{/if}
 
 		<h2>Your Score</h2>
 		<div class="stat card shadow-xl rounded-3xl statDisplay pt-8">

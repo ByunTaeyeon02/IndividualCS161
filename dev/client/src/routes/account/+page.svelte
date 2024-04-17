@@ -194,11 +194,11 @@
 		<div class="overflow-x-auto">
 			<table class="table">
 				<tbody>
-					<tr class="hover"> 
+					<tr> 
 						<th>Account Type</th>
-						<td>{userType}</td>
+						<td colspan="3">{userType}</td>
 					</tr>
-					<tr class="hover"> 
+					<tr> 
 						<th>Username</th>
 						<td colspan="2">
 							<label class="input input-bordered flex items-center gap-2">
@@ -210,7 +210,7 @@
 							<button class="btn btn-outline shadow-xl" on:click={changeUsername}>Confirm</button>
 						</td>
 					</tr>
-					<tr class="hover"> 
+					<tr> 
 						<th>Password</th>
 						<td>
 							<label class="input input-bordered flex items-center gap-2">
@@ -248,7 +248,7 @@
 					</tr>
 				  </thead>
 				<tbody>
-					<tr class="hover"> 
+					<tr> 
 						<th>Puzzles</th>
 						<td>{puzzleCompleted}</td>
 						<td>{numOfGiveUpsUsed}</td>
@@ -271,7 +271,7 @@
 					</tr>
 				  </thead>
 				<tbody>
-					<tr class="hover"> 
+					<tr> 
 						<th>Hints</th>
 						<td>{numOfHints}</td>
 						<td>{numOfHintsUsed}</td>
