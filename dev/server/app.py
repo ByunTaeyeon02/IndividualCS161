@@ -191,16 +191,6 @@ def load_info():
         return jsonify({'message': 'User information loaded successfully'}), 201
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    
-@app.route('/clearData', methods=['GET'])
-def clear_data():
-    try:
-        db.session.query(User).delete()
-        db.session.commit()
-        return jsonify({'message': 'All data cleared successfully'}), 200
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': str(e)}), 500
 
 
 @app.route('/getTotals')

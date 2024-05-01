@@ -142,22 +142,6 @@
         	console.error('Error:', error);
     	}
 	}
-
-	async function clearData() {
-		try {
-			const response = await fetch('/clearData', {
-				method: 'GET'
-			});
-			if (!response.ok) {
-				throw new Error('Failed to clear data');
-			}
-			const responseData = await response.json();
-			//console.log(responseData.message);
-			window.location.href = '/';
-		} catch (error) {
-			console.error('Error:', error);
-		}
-	}
 </script>
 
 <svelte:head>
@@ -186,14 +170,6 @@
 								<span class="label-text">Upload Data (JSON)</span>
 							</div>
 							<input type="file" class="file-input file-input-bordered w-full" accept=".json" on:change={uploadUserInfo}>
-						</label>
-					</div>
-					<div class="stat">
-						<label class="form-control w-full">
-							<div class="label">
-								<span class="label-text">Clear Data</span>
-							</div>
-							<button class="btn btn-outline shadow-xl" style="width: 100%" on:click={clearData}>Clear Data</button>
 						</label>
 					</div>
 				</div>
