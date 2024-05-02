@@ -1,8 +1,0 @@
-version: '3.4'
-
-services:
-  tileflip:
-    image: tileflip
-    build:
-      context: .
-      dockerfile: ./Dockerfile
