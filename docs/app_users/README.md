@@ -1,7 +1,7 @@
 ## __How To Use App (Tile Flip)__ ##
 
 - ### __Playing Game__ ###
-	- From the home page you can play the game by clicking on the tiles
+	- From the home page on https://www.tileflip-monogram.com/ you can play the game by clicking on the tiles
 	- Tiles can be gray, black, and white
 		- Gray: unknown (player has not decided which color the tile is supposed to be)
 	- Buttons:
@@ -14,7 +14,7 @@
 		- Hint: show the correct answer to a selected tile
 			- Press the button first and then click on a tile to see the correct answer
 		- Done: check if the user's answer is right
-  			- If there are still gray tiles: prompt a message that the puzzle is not completed
+  			- If there are still gray tiles: prompt a message that the puzzle is not completed and ask if they want to turn all gray tiles to white ones
      			- If the answer is wrong: prompt number of wrong tile(s)
         		- If the answer is correct: ask the user if they want to start a new game
 - ### __Navigating Using Navbar (Left to Right)__ ###
@@ -22,13 +22,12 @@
  		- If you hover over the logo the name of the game will show :)
  	- Darkmode Toggle: default of light
   		- Works even if you move to another page using the navbar
-    		- Preference doesn't save when refreshing the page (WIP)
    	- Hamburger Menu
-   		- If you are logged in (Not connected to the backend)
+   		- If you are logged in
    	 		- Game: navigate to the game page
-   	   		- Score: show stats of player (Only for players who signed in) (WIP)
-			- Setting: edit the user's settings like password and username or delete the account (Only for players who signed in) (WIP)
-			- Log-out: log out of account (WIP)
-		- Else (Not connected to the backend)
+   	   		- Score: show stats of player (Only for players who signed in)
+			- Setting: edit the user's settings like password and username or delete the account (Only for players who signed in)
+			- Log-out: log out of account
+		- Else 
 			- Game: navigate to the game page
-  			- Log-in/Sign-up: Gives options for users to log-in or sign-up to save score (WIP)
+  			- Log-in/Sign-up: Gives options for users to log-in or sign-up to save score
