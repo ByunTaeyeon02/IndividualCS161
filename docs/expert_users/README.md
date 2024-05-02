@@ -1,9 +1,8 @@
 ## __Building product instructions (Tile Flip)__ ##
 
 - ### __No Installation Needed (Using Heroku)__ ##
-	- go to http://www.tileflip-monogram.com/
+	- go to https://www.tileflip-monogram.com/
   	- or https://tile-flip-monogram-4b24b968e494.herokuapp.com/
- 	- I'm working on getting domain from http to https
 
 - ### __Cloning GitHub project to computer__ ###
 	- (Option 1) Using GitHub Desktop
